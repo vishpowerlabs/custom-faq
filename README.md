@@ -157,39 +157,7 @@ This is the critical step that restricts contributors to only edit/delete their 
 
 **Note:** Visitors have **Read-only** access. They cannot create, edit, or delete any items.
 
-### PowerShell Script for Permissions (Optional)
 
-For automated setup using PnP PowerShell:
-
-```powershell
-# Connect to your site
-Connect-PnPOnline -Url "https://yourtenant.sharepoint.com/sites/yoursite" -Interactive
-
-# Get the list
-$list = Get-PnPList -Identity "FAQ"
-
-# Break permission inheritance (keep existing permissions)
-Set-PnPList -Identity $list -BreakRoleInheritance -CopyRoleAssignments
-
-# Set item-level permissions
-Set-PnPList -Identity $list -ReadSecurity 1 -WriteSecurity 2
-
-# ReadSecurity: 1 = Read all items
-# WriteSecurity: 2 = Create and edit items created by the user
-
-# Grant read access to everyone
-$everyoneGroup = Get-PnPGroup -AssociatedVisitorGroup
-Set-PnPListPermission -Identity $list -Group $everyoneGroup -AddRole "Read"
-
-Write-Host "FAQ list permissions configured successfully!" -ForegroundColor Green
-```
-
-### Additional Security Recommendations
-
-1. **Audit Trail**: Enable versioning in List Settings → Versioning Settings to track changes
-2. **Content Approval**: Consider enabling content approval if FAQ submissions need review
-3. **Column Validation**: Add validation formulas to ensure data quality
-4. **Retention Policy**: Apply a retention policy for compliance if needed
 
 ---
 
