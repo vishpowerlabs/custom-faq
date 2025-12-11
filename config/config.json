@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "custom-faq-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/customFaq/CustomFaqWebPart.js",
+          "manifest": "./src/webparts/customFaq/CustomFaqWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "CustomFaqWebPartStrings": "lib/webparts/customFaq/loc/{locale}.js"
+  }
+}

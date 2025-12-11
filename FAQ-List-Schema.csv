@@ -1,0 +1,133 @@
+Title,Answer,Category,SortOrder
+How do I reset my password?,"To reset your password, follow these steps:
+
+1. Go to the login page
+2. Click on 'Forgot Password' link
+3. Enter your email address
+4. Check your inbox for the reset link
+5. Click the link and create a new password
+
+Note: The reset link expires after 24 hours. If you don't receive the email, check your spam folder.",Account & Security,1
+What are the office hours?,"Our office is open during the following hours:
+
+Monday - Friday: 9:00 AM - 5:00 PM (EST)
+Saturday: 10:00 AM - 2:00 PM (EST)
+Sunday: Closed
+
+For urgent matters outside business hours, please contact our emergency support line at 1-800-XXX-XXXX.",General,2
+How do I submit a support ticket?,"You can submit a support ticket through multiple channels:
+
+1. **Online Portal**: Visit our helpdesk portal and click 'New Ticket'
+2. **Email**: Send an email to support@company.com
+3. **Phone**: Call our support line during business hours
+
+When submitting a ticket, please include:
+- Detailed description of the issue
+- Screenshots if applicable
+- Your contact information
+- Priority level (Low, Medium, High, Critical)",Support,3
+Where can I find the employee handbook?,"The employee handbook is available in the following locations:
+
+1. SharePoint HR Documents library
+2. Company intranet under 'Resources'
+3. Request a printed copy from HR
+
+The handbook is updated annually. Please ensure you're viewing the latest version by checking the revision date on the cover page.",HR & Policies,4
+How do I request time off?,"To request time off:
+
+1. Log into the HR portal
+2. Navigate to 'Time & Attendance'
+3. Click 'Request Time Off'
+4. Select the type of leave (Vacation, Sick, Personal)
+5. Enter the dates and any notes
+6. Submit for manager approval
+
+Requests should be submitted at least 2 weeks in advance for planned leave. Emergency requests will be reviewed on a case-by-case basis.",HR & Policies,5
+What is the IT equipment return policy?,"When leaving the company or upgrading equipment:
+
+1. Schedule an appointment with IT
+2. Back up any personal data (with manager approval)
+3. Return all equipment including:
+   - Laptop/Desktop
+   - Monitors
+   - Keyboard and mouse
+   - Cables and adapters
+   - Access cards and keys
+
+Equipment must be returned within 5 business days of your last working day.",IT & Equipment,6
+How do I connect to the VPN?,"To connect to the company VPN:
+
+1. Download the VPN client from the IT portal
+2. Install the application
+3. Launch the VPN client
+4. Enter your corporate credentials
+5. Select the appropriate server
+6. Click 'Connect'
+
+Troubleshooting:
+- Ensure your internet connection is stable
+- Check that your credentials are correct
+- Contact IT if issues persist",IT & Equipment,7
+What is the expense reimbursement process?,"To submit expenses for reimbursement:
+
+1. Collect all receipts
+2. Log into the expense management system
+3. Create a new expense report
+4. Upload receipt images
+5. Categorize each expense
+6. Add business justification
+7. Submit for approval
+
+Processing time: 5-10 business days after approval
+Maximum processing: $500 without pre-approval",Finance,8
+How do I book a meeting room?,"Meeting rooms can be booked through:
+
+1. **Outlook**: Add the room as a resource when creating a meeting
+2. **Room Booking App**: Use the company room booking application
+3. **Reception**: For same-day bookings, contact reception
+
+Tips:
+- Book in advance for popular rooms
+- Release unused bookings
+- Check room capacity before booking",Facilities,9
+What is the guest WiFi password?,"Guest WiFi Information:
+
+Network Name: Company-Guest
+Password: Welcome2024!
+
+Note: 
+- Password changes monthly
+- Guest network has limited access
+- Do not use for sensitive work
+- Contact IT for extended guest access needs",IT & Equipment,10
+How do I update my contact information?,"To update your contact information:
+
+1. Log into the HR self-service portal
+2. Go to 'My Profile'
+3. Click 'Edit Personal Information'
+4. Update the relevant fields:
+   - Home address
+   - Phone number
+   - Emergency contacts
+5. Save changes
+
+Important: Address changes may require updated tax forms.",HR & Policies,11
+What benefits are available to employees?,"Employee benefits include:
+
+**Health & Wellness**
+- Medical insurance
+- Dental and vision coverage
+- Mental health support
+- Gym membership discount
+
+**Financial**
+- 401(k) with company match
+- Life insurance
+- Employee stock purchase plan
+
+**Work-Life Balance**
+- Flexible working hours
+- Remote work options
+- Paid parental leave
+
+Contact HR for detailed benefit information.",HR & Policies,12

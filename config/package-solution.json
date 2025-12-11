@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "custom-faq-client-side-solution",
+    "id": "b1c2d3e4-f5a6-7890-bcde-f12345678901",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.18.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Custom FAQ Accordion Web Part"
+      },
+      "longDescription": {
+        "default": "A SharePoint Framework web part that displays list items as an interactive FAQ accordion with full theme support."
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Custom FAQ WebPart Feature",
+        "description": "This feature deploys the Custom FAQ web part.",
+        "id": "c2d3e4f5-a6b7-8901-cdef-234567890123",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/custom-faq.sppkg"
+  }
+}
