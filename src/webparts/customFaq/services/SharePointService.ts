@@ -34,6 +34,7 @@ export interface IFaqItem {
   id: number;
   title: string;
   description: string;
+  category: string;
   attachments: IAttachment[];
 }
 
@@ -53,198 +54,239 @@ export class SharePointService {
    * Get all lists from the current site
    * Filters out hidden lists and system lists
    */
-  public async getLists(): Promise<IListInfo[]> {
-    const endpoint = `${this._siteUrl}/_api/web/lists?$filter=Hidden eq false and BaseTemplate eq 100&$select=Id,Title&$orderby=Title`;
+  public getLists(): Promise<IListInfo[]> {
+    const endpoint = this._siteUrl + '/_api/web/lists?$filter=Hidden eq false and BaseTemplate eq 100&$select=Id,Title&$orderby=Title';
 
-    try {
-      const response: SPHttpClientResponse = await this._context.spHttpClient.get(
-        endpoint,
-        SPHttpClient.configurations.v1
-      );
-
-      if (!response.ok) {
-        throw new Error(`Error fetching lists: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-
-      return data.value.map((list: { Id: string; Title: string }) => ({
-        id: list.Id,
-        title: list.Title
-      }));
-    } catch (error) {
-      console.error('SharePointService.getLists error:', error);
-      throw error;
-    }
+    return this._context.spHttpClient.get(
+      endpoint,
+      SPHttpClient.configurations.v1
+    )
+      .then((response: SPHttpClientResponse) => {
+        if (!response.ok) {
+          throw new Error('Error fetching lists: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then((data: { value: Array<{ Id: string; Title: string }> }) => {
+        const lists: IListInfo[] = [];
+        for (let i = 0; i < data.value.length; i++) {
+          lists.push({
+            id: data.value[i].Id,
+            title: data.value[i].Title
+          });
+        }
+        return lists;
+      });
   }
 
   /**
    * Get columns for a specific list
-   * Returns only Text and Note (multi-line text) columns
+   * Returns Text, Note, and Choice columns
    */
-  public async getListColumns(listId: string): Promise<IColumnInfo[]> {
-    // Filter for Text and Note field types
-    const endpoint = `${this._siteUrl}/_api/web/lists(guid'${listId}')/fields?$filter=(TypeAsString eq 'Text' or TypeAsString eq 'Note') and Hidden eq false and ReadOnlyField eq false&$select=Id,InternalName,Title,TypeAsString&$orderby=Title`;
+  public getListColumns(listId: string): Promise<IColumnInfo[]> {
+    // Filter for Text, Note, and Choice field types
+    const endpoint = this._siteUrl + '/_api/web/lists(guid\'' + listId + '\')/fields?$filter=(TypeAsString eq \'Text\' or TypeAsString eq \'Note\' or TypeAsString eq \'Choice\') and Hidden eq false and ReadOnlyField eq false&$select=Id,InternalName,Title,TypeAsString&$orderby=Title';
 
-    try {
-      const response: SPHttpClientResponse = await this._context.spHttpClient.get(
-        endpoint,
-        SPHttpClient.configurations.v1
-      );
-
-      if (!response.ok) {
-        throw new Error(`Error fetching columns: ${response.statusText}`);
-      }
-
-      const data = await response.json();
-
-      return data.value.map((field: { Id: string; InternalName: string; Title: string; TypeAsString: string }) => ({
-        id: field.Id,
-        internalName: field.InternalName,
-        title: field.Title,
-        type: field.TypeAsString
-      }));
-    } catch (error) {
-      console.error('SharePointService.getListColumns error:', error);
-      throw error;
-    }
+    return this._context.spHttpClient.get(
+      endpoint,
+      SPHttpClient.configurations.v1
+    )
+      .then((response: SPHttpClientResponse) => {
+        if (!response.ok) {
+          throw new Error('Error fetching columns: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then((data: { value: Array<{ Id: string; InternalName: string; Title: string; TypeAsString: string }> }) => {
+        const columns: IColumnInfo[] = [];
+        for (let i = 0; i < data.value.length; i++) {
+          columns.push({
+            id: data.value[i].Id,
+            internalName: data.value[i].InternalName,
+            title: data.value[i].Title,
+            type: data.value[i].TypeAsString
+          });
+        }
+        return columns;
+      });
   }
 
   /**
    * Get all items from a list with specified columns
    * Also fetches attachments for each item
    */
-  public async getListItems(
+  public getListItems(
     listId: string,
     titleColumn: string,
-    descriptionColumn: string
+    descriptionColumn: string,
+    categoryColumn?: string
   ): Promise<IFaqItem[]> {
     // Build select query - always include Id and Attachments
-    const selectFields = ['Id', titleColumn];
+    const selectFields: string[] = ['Id', titleColumn];
     if (descriptionColumn !== titleColumn) {
       selectFields.push(descriptionColumn);
     }
+    if (categoryColumn && categoryColumn !== titleColumn && categoryColumn !== descriptionColumn) {
+      selectFields.push(categoryColumn);
+    }
     selectFields.push('Attachments');
 
-    const endpoint = `${this._siteUrl}/_api/web/lists(guid'${listId}')/items?$select=${selectFields.join(',')}&$top=100`;
+    const endpoint = this._siteUrl + '/_api/web/lists(guid\'' + listId + '\')/items?$select=' + selectFields.join(',') + '&$top=500';
 
-    try {
-      const response: SPHttpClientResponse = await this._context.spHttpClient.get(
-        endpoint,
-        SPHttpClient.configurations.v1
-      );
+    const self = this;
 
-      if (!response.ok) {
-        throw new Error(`Error fetching items: ${response.statusText}`);
-      }
+    return this._context.spHttpClient.get(
+      endpoint,
+      SPHttpClient.configurations.v1
+    )
+      .then((response: SPHttpClientResponse) => {
+        if (!response.ok) {
+          throw new Error('Error fetching items: ' + response.statusText);
+        }
+        return response.json();
+      })
+      .then((data: { value: Array<{ [key: string]: unknown }> }) => {
+        // Process items and fetch attachments
+        const itemPromises: Array<Promise<IFaqItem>> = [];
 
-      const data = await response.json();
+        for (let i = 0; i < data.value.length; i++) {
+          const item = data.value[i];
+          itemPromises.push(self._processItem(item, listId, titleColumn, descriptionColumn, categoryColumn));
+        }
 
-      // Process items and fetch attachments
-      const items: IFaqItem[] = await Promise.all(
-        data.value.map(async (item: Record<string, unknown>) => {
-          const faqItem: IFaqItem = {
-            id: item.Id as number,
-            title: (item[titleColumn] as string) || '',
-            description: (item[descriptionColumn] as string) || '',
-            attachments: []
-          };
-
-          // If item has attachments, fetch them
-          if (item.Attachments) {
-            faqItem.attachments = await this._getItemAttachments(listId, item.Id as number);
+        return Promise.all(itemPromises);
+      })
+      .then((items: IFaqItem[]) => {
+        // Filter out items without titles
+        const filteredItems: IFaqItem[] = [];
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].title && items[i].title.trim() !== '') {
+            filteredItems.push(items[i]);
           }
+        }
+        return filteredItems;
+      });
+  }
 
+  /**
+   * Process a single item and fetch its attachments
+   */
+  private _processItem(
+    item: { [key: string]: unknown },
+    listId: string,
+    titleColumn: string,
+    descriptionColumn: string,
+    categoryColumn?: string
+  ): Promise<IFaqItem> {
+    const self = this;
+    const faqItem: IFaqItem = {
+      id: item.Id as number,
+      title: (item[titleColumn] as string) || '',
+      description: (item[descriptionColumn] as string) || '',
+      category: categoryColumn ? ((item[categoryColumn] as string) || '') : '',
+      attachments: []
+    };
+
+    // If item has attachments, fetch them
+    if (item.Attachments) {
+      return self._getItemAttachments(listId, item.Id as number)
+        .then((attachments: IAttachment[]) => {
+          faqItem.attachments = attachments;
           return faqItem;
-        })
-      );
-
-      // Filter out items without titles
-      return items.filter(item => item.title.trim() !== '');
-    } catch (error) {
-      console.error('SharePointService.getListItems error:', error);
-      throw error;
+        });
     }
+
+    return Promise.resolve(faqItem);
   }
 
   /**
    * Get attachments for a specific list item
    */
-  private async _getItemAttachments(listId: string, itemId: number): Promise<IAttachment[]> {
-    const endpoint = `${this._siteUrl}/_api/web/lists(guid'${listId}')/items(${itemId})/AttachmentFiles`;
+  private _getItemAttachments(listId: string, itemId: number): Promise<IAttachment[]> {
+    const endpoint = this._siteUrl + '/_api/web/lists(guid\'' + listId + '\')/items(' + itemId + ')/AttachmentFiles';
+    const self = this;
 
-    try {
-      const response: SPHttpClientResponse = await this._context.spHttpClient.get(
-        endpoint,
-        SPHttpClient.configurations.v1
-      );
+    return this._context.spHttpClient.get(
+      endpoint,
+      SPHttpClient.configurations.v1
+    )
+      .then((response: SPHttpClientResponse) => {
+        if (!response.ok) {
+          console.warn('Could not fetch attachments for item ' + itemId);
+          return { value: [] };
+        }
+        return response.json();
+      })
+      .then((data: { value: Array<{ FileName: string; ServerRelativeUrl: string }> }) => {
+        const attachments: IAttachment[] = [];
+        const baseUrl = self._context.pageContext.web.absoluteUrl.split('/').slice(0, 3).join('/');
 
-      if (!response.ok) {
-        console.warn(`Could not fetch attachments for item ${itemId}`);
+        for (let i = 0; i < data.value.length; i++) {
+          attachments.push({
+            fileName: data.value[i].FileName,
+            url: baseUrl + data.value[i].ServerRelativeUrl
+          });
+        }
+
+        return attachments;
+      })
+      .catch((error: Error) => {
+        console.warn('Error fetching attachments:', error);
         return [];
-      }
-
-      const data = await response.json();
-
-      return data.value.map((attachment: { FileName: string; ServerRelativeUrl: string }) => ({
-        fileName: attachment.FileName,
-        url: `${this._context.pageContext.web.absoluteUrl.split('/').slice(0, 3).join('/')}${attachment.ServerRelativeUrl}`
-      }));
-    } catch (error) {
-      console.warn('Error fetching attachments:', error);
-      return [];
-    }
+      });
   }
 
   /**
    * Get a specific list by ID
    */
-  public async getListById(listId: string): Promise<IListInfo | null> {
-    const endpoint = `${this._siteUrl}/_api/web/lists(guid'${listId}')?$select=Id,Title`;
+  public getListById(listId: string): Promise<IListInfo | null> {
+    const endpoint = this._siteUrl + '/_api/web/lists(guid\'' + listId + '\')?$select=Id,Title';
 
-    try {
-      const response: SPHttpClientResponse = await this._context.spHttpClient.get(
-        endpoint,
-        SPHttpClient.configurations.v1
-      );
-
-      if (!response.ok) {
+    return this._context.spHttpClient.get(
+      endpoint,
+      SPHttpClient.configurations.v1
+    )
+      .then((response: SPHttpClientResponse) => {
+        if (!response.ok) {
+          return null;
+        }
+        return response.json();
+      })
+      .then((data: { Id: string; Title: string } | null) => {
+        if (!data) {
+          return null;
+        }
+        return {
+          id: data.Id,
+          title: data.Title
+        };
+      })
+      .catch(() => {
         return null;
-      }
-
-      const data = await response.json();
-
-      return {
-        id: data.Id,
-        title: data.Title
-      };
-    } catch (error) {
-      console.warn('Error fetching list:', error);
-      return null;
-    }
+      });
   }
 
   /**
    * Check if a column exists in a list
    */
-  public async columnExists(listId: string, columnInternalName: string): Promise<boolean> {
-    const endpoint = `${this._siteUrl}/_api/web/lists(guid'${listId}')/fields?$filter=InternalName eq '${columnInternalName}'&$select=Id`;
+  public columnExists(listId: string, columnInternalName: string): Promise<boolean> {
+    const endpoint = this._siteUrl + '/_api/web/lists(guid\'' + listId + '\')/fields?$filter=InternalName eq \'' + columnInternalName + '\'&$select=Id';
 
-    try {
-      const response: SPHttpClientResponse = await this._context.spHttpClient.get(
-        endpoint,
-        SPHttpClient.configurations.v1
-      );
-
-      if (!response.ok) {
+    return this._context.spHttpClient.get(
+      endpoint,
+      SPHttpClient.configurations.v1
+    )
+      .then((response: SPHttpClientResponse) => {
+        if (!response.ok) {
+          return false;
+        }
+        return response.json();
+      })
+      .then((data: { value: Array<{ Id: string }> }) => {
+        return data.value && data.value.length > 0;
+      })
+      .catch(() => {
         return false;
-      }
-
-      const data = await response.json();
-      return data.value && data.value.length > 0;
-    } catch (error) {
-      console.warn('Error checking column existence:', error);
-      return false;
-    }
+      });
   }
 }
