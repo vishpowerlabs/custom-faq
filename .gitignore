@@ -4,10 +4,10 @@ node_modules/
 # Build outputs
 dist/
 lib/
-release/
-solution/
+
+
 temp/
-sharepoint/
+
 
 # Logs
 *.log
