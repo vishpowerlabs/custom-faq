@@ -57,7 +57,8 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
    * Initialize the web part
    */
   protected onInit(): Promise<void> {
-    return super.onInit().then((): void => {
+  return super.onInit()
+    .then((): void => {
       // Initialize SharePoint service
       this._spService = new SharePointService(this.context as WebPartContext);
 
@@ -75,20 +76,19 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       if (this._themeVariant) {
         this._setCSSVariables(this._themeVariant);
       }
-    }).then((): Promise<void> => {
+    })
+    .then(() => {
       return this._loadLists();
-    }).then((): Promise<void> => {
+    })
+    .then(() => {
       if (this.properties.selectedList) {
-        return this._loadColumns().then((): Promise<void> => {
-          return this._loadFaqItems();
-        });
+        return this._loadColumns().then(() => this._loadFaqItems());
       }
-      return Promise.resolve();
-    }).catch((error: Error) => {
+    })
+    .catch((error: Error): void => {
       console.error('Error during initialization:', error);
-      return Promise.resolve();
     });
-  }
+}
 
   private _handleThemeChangedEvent(args: ThemeChangedEventArgs): void {
     this._themeVariant = args.theme;
@@ -551,9 +551,9 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
   /**
    * Escape special regex characters
    */
-  private _escapeRegExp(text: string): string {
-    return text.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
+private _escapeRegExp(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
   private _getFontSize(size: string | undefined, defaultSize: string): string {
     return (size || defaultSize) + 'px';
