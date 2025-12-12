@@ -10,7 +10,9 @@ release/
 # =========================
 # SPFx packaging output
 # =========================
-*.sppkg
+sharepoint/solution/debug/
+sharepoint/solution/release/
+ 
 
 # =========================
 # IDE / Tools
