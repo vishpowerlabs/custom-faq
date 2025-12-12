@@ -29,6 +29,12 @@ export interface ICustomFaqWebPartProps {
   webpartDescriptionFontSize: string;
   faqTitleFontSize: string;
   faqDescriptionFontSize: string;
+  enableSearch: boolean;
+  searchInHeader: boolean;
+  highlightSearchMatches: boolean;
+  searchInAnswers: boolean;
+  showResultsCount: boolean;
+  searchPlaceholder: string;
 }
 
 export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWebPartProps> {
@@ -41,6 +47,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
   private _themeVariant: IReadonlyTheme | undefined;
   private _selectedCategory: string = 'All';
   private _categories: string[] = [];
+  private _searchQuery: string = '';
 
   /**
    * Initialize the web part
@@ -54,22 +61,17 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       try {
         this._themeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey);
         if (this._themeProvider) {
-          // Get the current theme variant
           this._themeVariant = this._themeProvider.tryGetTheme();
-
-          // Register handler for theme changes
           this._themeProvider.themeChangedEvent.add(this, this._handleThemeChangedEvent);
         }
       } catch (error) {
         console.log('ThemeProvider not available:', error);
       }
 
-      // Apply CSS variables from theme
       if (this._themeVariant) {
         this._setCSSVariables(this._themeVariant);
       }
     }).then((): Promise<void> => {
-      // Load initial data
       return this._loadLists();
     }).then((): Promise<void> => {
       if (this.properties.selectedList) {
@@ -84,9 +86,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     });
   }
 
-  /**
-   * Handle theme change events (section background changes)
-   */
   private _handleThemeChangedEvent(args: ThemeChangedEventArgs): void {
     this._themeVariant = args.theme;
     if (this._themeVariant) {
@@ -95,16 +94,12 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     this.render();
   }
 
-  /**
-   * Convert theme semantic colors to CSS variables for use in SCSS
-   */
   private _setCSSVariables(theme: IReadonlyTheme): void {
     if (!this.domElement) {
       return;
     }
 
     try {
-      // Set semantic colors as CSS variables
       if (theme.semanticColors) {
         const semanticColors: { [key: string]: string } = theme.semanticColors as { [key: string]: string };
         const semanticKeys = Object.keys(semanticColors);
@@ -117,7 +112,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
         }
       }
 
-      // Set palette colors as CSS variables
       if (theme.palette) {
         const palette: { [key: string]: string } = theme.palette as { [key: string]: string };
         const paletteKeys = Object.keys(palette);
@@ -134,9 +128,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     }
   }
 
-  /**
-   * Extract unique categories from FAQ items
-   */
   private _extractCategories(): void {
     const categorySet: { [key: string]: boolean } = {};
     this._categories = [];
@@ -149,30 +140,100 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       }
     }
 
-    // Sort categories alphabetically
     this._categories.sort();
   }
 
   /**
-   * Get filtered FAQ items based on selected category
+   * Get filtered FAQ items based on selected category and search query
    */
   private _getFilteredItems(): IFaqItem[] {
-    if (this._selectedCategory === 'All') {
-      return this._faqItems;
-    }
+    let filtered: IFaqItem[] = [];
 
-    const filtered: IFaqItem[] = [];
-    for (let i = 0; i < this._faqItems.length; i++) {
-      if (this._faqItems[i].category === this._selectedCategory) {
-        filtered.push(this._faqItems[i]);
+    // First filter by category
+    if (this._selectedCategory === 'All') {
+      filtered = this._faqItems.slice();
+    } else {
+      for (let i = 0; i < this._faqItems.length; i++) {
+        if (this._faqItems[i].category === this._selectedCategory) {
+          filtered.push(this._faqItems[i]);
+        }
       }
     }
+
+    // Then filter by search query
+    if (this._searchQuery && this._searchQuery.trim() !== '') {
+      const query = this._searchQuery.toLowerCase().trim();
+      const searchResults: IFaqItem[] = [];
+
+      for (let i = 0; i < filtered.length; i++) {
+        const item = filtered[i];
+        const titleMatch = item.title && item.title.toLowerCase().indexOf(query) !== -1;
+        let answerMatch = false;
+
+        if (this.properties.searchInAnswers && item.description) {
+          // Strip HTML tags for search
+          const plainDescription = item.description.replace(/<[^>]*>/g, '');
+          answerMatch = plainDescription.toLowerCase().indexOf(query) !== -1;
+        }
+
+        if (titleMatch || answerMatch) {
+          searchResults.push(item);
+        }
+      }
+
+      filtered = searchResults;
+    }
+
     return filtered;
   }
 
   /**
-   * Get font size value with px suffix
+   * Get total count of items (before search filter, after category filter)
    */
+  private _getTotalItemsInCategory(): number {
+    if (this._selectedCategory === 'All') {
+      return this._faqItems.length;
+    }
+
+    let count = 0;
+    for (let i = 0; i < this._faqItems.length; i++) {
+      if (this._faqItems[i].category === this._selectedCategory) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  /**
+   * Highlight search matches in text
+   */
+  private _highlightText(text: string, isHtml: boolean): string {
+    if (!this._searchQuery || this._searchQuery.trim() === '' || !this.properties.highlightSearchMatches) {
+      return text;
+    }
+
+    const query = this._searchQuery.trim();
+    
+    if (isHtml) {
+      // For HTML content, we need to be careful not to highlight inside tags
+      // Simple approach: highlight only in text nodes
+      const regex = new RegExp('(' + this._escapeRegExp(query) + ')', 'gi');
+      return text.replace(/>([^<]+)</g, function(match: string, content: string): string {
+        return '>' + content.replace(regex, '<mark class="' + styles.searchHighlight + '">$1</mark>') + '<';
+      });
+    } else {
+      const regex = new RegExp('(' + this._escapeRegExp(query) + ')', 'gi');
+      return text.replace(regex, '<mark class="' + styles.searchHighlight + '">$1</mark>');
+    }
+  }
+
+  /**
+   * Escape special regex characters
+   */
+  private _escapeRegExp(text: string): string {
+    return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
   private _getFontSize(size: string | undefined, defaultSize: string): string {
     return (size || defaultSize) + 'px';
   }
@@ -182,44 +243,54 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
    */
   public render(): void {
     try {
-      // Build inline styles from theme for elements that need direct styling
       const semanticColors = this._themeVariant ? this._themeVariant.semanticColors : undefined;
       const palette = this._themeVariant ? this._themeVariant.palette : undefined;
 
-      // Header background using theme primary color
       const headerBgColor = (palette && palette.themePrimary) ? palette.themePrimary : '#0078d4';
       const headerBgColorDark = (palette && palette.themeDark) ? palette.themeDark : '#005a9e';
-
-      // Body colors
       const bodyBackground = (semanticColors && semanticColors.bodyBackground) ? semanticColors.bodyBackground : '#ffffff';
       const bodyText = (semanticColors && semanticColors.bodyText) ? semanticColors.bodyText : '#323130';
       const bodySubtext = (semanticColors && semanticColors.bodySubtext) ? semanticColors.bodySubtext : '#605e5c';
-
-      // Interactive colors
       const linkColor = (semanticColors && semanticColors.link) ? semanticColors.link : ((palette && palette.themePrimary) ? palette.themePrimary : '#0078d4');
-
-      // Border and divider colors
       const bodyDivider = (semanticColors && semanticColors.bodyDivider) ? semanticColors.bodyDivider : '#edebe9';
-
-      // Hover states
       const listItemBackgroundHovered = (semanticColors && semanticColors.listItemBackgroundHovered) ? semanticColors.listItemBackgroundHovered : '#f3f2f1';
-
-      // Card/container background
       const cardBackground = (semanticColors && semanticColors.cardStandoutBackground) ? semanticColors.cardStandoutBackground : bodyBackground;
-
-      // Attachment area background
       const neutralLighter = (palette && palette.neutralLighter) ? palette.neutralLighter : '#f4f4f4';
       const neutralTertiary = (palette && palette.neutralTertiary) ? palette.neutralTertiary : '#a6a6a6';
       const neutralLight = (palette && palette.neutralLight) ? palette.neutralLight : '#eaeaea';
+      const inputBackground = (semanticColors && semanticColors.inputBackground) ? semanticColors.inputBackground : '#ffffff';
+      const inputBorder = (semanticColors && semanticColors.inputBorder) ? semanticColors.inputBorder : '#8a8886';
 
-      // Font sizes with defaults
       const webpartTitleFontSize = this._getFontSize(this.properties.webpartTitleFontSize, '24');
       const webpartDescriptionFontSize = this._getFontSize(this.properties.webpartDescriptionFontSize, '14');
       const faqTitleFontSize = this._getFontSize(this.properties.faqTitleFontSize, '16');
       const faqDescriptionFontSize = this._getFontSize(this.properties.faqDescriptionFontSize, '14');
 
+      const searchPlaceholder = this.properties.searchPlaceholder || 'Search FAQs...';
+
       let faqItemsHtml = '';
       let categoryTabsHtml = '';
+      let searchHtml = '';
+      let searchInHeaderHtml = '';
+      let resultsInfoHtml = '';
+
+      // Build search input HTML
+      const searchInputHtml = '<div class="' + styles.searchContainer + '">' +
+        '<svg class="' + styles.searchIcon + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+        '<circle cx="11" cy="11" r="8"/>' +
+        '<path d="M21 21l-4.35-4.35"/>' +
+        '</svg>' +
+        '<input type="text" class="' + styles.searchInput + '" ' +
+        'placeholder="' + this._escapeHtml(searchPlaceholder) + '" ' +
+        'value="' + this._escapeHtml(this._searchQuery) + '" ' +
+        'style="background-color: ' + inputBackground + '; border-color: ' + inputBorder + '; color: ' + bodyText + ';">' +
+        (this._searchQuery ? '<button class="' + styles.clearButton + '" title="Clear search" style="color: ' + bodySubtext + ';">' +
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+        '<line x1="18" y1="6" x2="6" y2="18"/>' +
+        '<line x1="6" y1="6" x2="18" y2="18"/>' +
+        '</svg>' +
+        '</button>' : '') +
+        '</div>';
 
       if (!this.properties.selectedList) {
         faqItemsHtml = '<div class="' + styles.emptyState + '" style="color: ' + bodySubtext + ';">' +
@@ -231,11 +302,22 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
           '<p>Please configure the web part by selecting a list from the property pane.</p>' +
           '</div>';
       } else {
-        // Build category tabs if category column is selected
+        // Build search section (below header)
+        if (this.properties.enableSearch && !this.properties.searchInHeader) {
+          searchHtml = '<div class="' + styles.searchSection + '" style="background-color: ' + neutralLighter + '; border-bottom-color: ' + bodyDivider + ';">' +
+            searchInputHtml +
+            '</div>';
+        }
+
+        // Build search in header
+        if (this.properties.enableSearch && this.properties.searchInHeader) {
+          searchInHeaderHtml = '<div class="' + styles.searchInHeader + '">' + searchInputHtml + '</div>';
+        }
+
+        // Build category tabs
         if (this.properties.categoryColumn && this._categories.length > 0) {
           const tabsArray: string[] = [];
           
-          // Add "All" tab
           const allActiveClass = this._selectedCategory === 'All' ? ' ' + styles.activeTab : '';
           tabsArray.push(
             '<button class="' + styles.categoryTab + allActiveClass + '" ' +
@@ -246,7 +328,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
             '</button>'
           );
 
-          // Add category tabs
           for (let i = 0; i < this._categories.length; i++) {
             const category = this._categories[i];
             const isActive = this._selectedCategory === category;
@@ -268,16 +349,30 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
 
         // Get filtered items
         const filteredItems = this._getFilteredItems();
+        const totalItems = this._getTotalItemsInCategory();
+
+        // Build results info
+        if (this.properties.enableSearch && this.properties.showResultsCount && this._searchQuery && this._searchQuery.trim() !== '') {
+          resultsInfoHtml = '<div class="' + styles.resultsInfo + '" style="color: ' + bodySubtext + ';">' +
+            'Showing <strong style="color: ' + bodyText + ';">' + filteredItems.length + '</strong> of ' +
+            '<strong style="color: ' + bodyText + ';">' + totalItems + '</strong> FAQs matching ' +
+            '"<strong style="color: ' + bodyText + ';">' + this._escapeHtml(this._searchQuery) + '</strong>"' +
+            '</div>';
+        }
 
         if (filteredItems.length === 0) {
+          const noResultsMessage = this._searchQuery && this._searchQuery.trim() !== '' 
+            ? 'No FAQs found matching "' + this._escapeHtml(this._searchQuery) + '". Try different keywords or clear the search.'
+            : 'No FAQ items found' + (this._selectedCategory !== 'All' ? ' in this category' : '') + '.';
+
           faqItemsHtml = '<div class="' + styles.emptyState + '" style="color: ' + bodySubtext + ';">' +
             '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="' + neutralTertiary + '" stroke-width="1.5">' +
-            '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>' +
-            '<polyline points="14 2 14 8 20 8"/>' +
-            '<line x1="12" y1="18" x2="12" y2="12"/>' +
-            '<line x1="9" y1="15" x2="15" y2="15"/>' +
+            (this._searchQuery ? 
+              '<circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><line x1="8" y1="11" x2="14" y2="11"/>' :
+              '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>'
+            ) +
             '</svg>' +
-            '<p>No FAQ items found' + (this._selectedCategory !== 'All' ? ' in this category' : '') + '.</p>' +
+            '<p>' + noResultsMessage + '</p>' +
             '</div>';
         } else {
           const itemsHtmlArray: string[] = [];
@@ -313,11 +408,20 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
                 '</div>';
             }
 
+            // Apply highlighting to title
+            const highlightedTitle = this._highlightText(this._escapeHtml(item.title), false);
+            
+            // Apply highlighting to description
+            const formattedDescription = this._formatDescription(item.description);
+            const highlightedDescription = this.properties.searchInAnswers 
+              ? this._highlightText(formattedDescription, formattedDescription.indexOf('<') !== -1)
+              : formattedDescription;
+
             itemsHtmlArray.push(
               '<div class="' + styles.faqItem + '" data-index="' + index + '">' +
               '<div class="' + styles.faqQuestion + '" style="border-bottom-color: ' + bodyDivider + ';" data-hover-bg="' + listItemBackgroundHovered + '">' +
               '<span class="' + styles.faqQuestionText + '" style="color: ' + bodyText + '; font-size: ' + faqTitleFontSize + ';">' +
-              this._escapeHtml(item.title) +
+              highlightedTitle +
               '</span>' +
               '<span class="' + styles.faqChevron + '" style="color: ' + bodySubtext + ';">' +
               '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
@@ -327,7 +431,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
               '</div>' +
               '<div class="' + styles.faqAnswer + '">' +
               '<div class="' + styles.faqAnswerContent + '" style="color: ' + bodySubtext + '; font-size: ' + faqDescriptionFontSize + ';">' +
-              this._formatDescription(item.description) +
+              highlightedDescription +
               '</div>' +
               attachmentsHtml +
               '</div>' +
@@ -340,7 +444,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
 
       // Build header section
       let headerHtml = '';
-      if (this.properties.webpartTitle || this.properties.webpartDescription) {
+      if (this.properties.webpartTitle || this.properties.webpartDescription || searchInHeaderHtml) {
         headerHtml = '<div class="' + styles.faqHeader + '" style="background: linear-gradient(135deg, ' + headerBgColor + ' 0%, ' + headerBgColorDark + ' 100%);">';
         if (this.properties.webpartTitle) {
           headerHtml += '<h2 class="' + styles.faqTitle + '" style="font-size: ' + webpartTitleFontSize + ';">' + this._escapeHtml(this.properties.webpartTitle) + '</h2>';
@@ -348,21 +452,23 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
         if (this.properties.webpartDescription) {
           headerHtml += '<p class="' + styles.faqDescription + '" style="font-size: ' + webpartDescriptionFontSize + ';">' + this._escapeHtml(this.properties.webpartDescription) + '</p>';
         }
+        headerHtml += searchInHeaderHtml;
         headerHtml += '</div>';
       }
 
       this.domElement.innerHTML = '<div class="' + styles.customFaq + '" style="background-color: ' + cardBackground + ';">' +
         headerHtml +
+        searchHtml +
+        resultsInfoHtml +
         categoryTabsHtml +
         '<div class="' + styles.faqList + '">' +
         faqItemsHtml +
         '</div>' +
         '</div>';
 
-      // Attach event listeners for accordion functionality
       this._attachEventListeners();
-      // Attach event listeners for category tabs
       this._attachTabEventListeners();
+      this._attachSearchEventListeners();
     } catch (error) {
       console.error('Error during render:', error);
       this.domElement.innerHTML = '<div style="padding: 20px; color: red;">Error rendering web part. Please check console for details.</div>';
@@ -370,8 +476,50 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
   }
 
   /**
-   * Attach click event listeners to category tabs
+   * Attach search event listeners
    */
+  private _attachSearchEventListeners(): void {
+    const searchInput = this.domElement.querySelector('.' + styles.searchInput) as HTMLInputElement;
+    const clearButton = this.domElement.querySelector('.' + styles.clearButton) as HTMLButtonElement;
+    const self = this;
+
+    if (searchInput) {
+      // Debounce search input
+      let debounceTimer: number | undefined;
+      
+      searchInput.addEventListener('input', function(): void {
+        if (debounceTimer) {
+          clearTimeout(debounceTimer);
+        }
+        debounceTimer = setTimeout(function(): void {
+          self._searchQuery = searchInput.value;
+          self.render();
+        }, 300) as unknown as number;
+      });
+
+      // Handle Enter key
+      searchInput.addEventListener('keydown', function(e: KeyboardEvent): void {
+        if (e.key === 'Escape') {
+          self._searchQuery = '';
+          self.render();
+        }
+      });
+
+      // Focus the input if it had a value (maintain focus after re-render)
+      if (this._searchQuery) {
+        searchInput.focus();
+        searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+      }
+    }
+
+    if (clearButton) {
+      clearButton.addEventListener('click', function(): void {
+        self._searchQuery = '';
+        self.render();
+      });
+    }
+  }
+
   private _attachTabEventListeners(): void {
     const tabs = this.domElement.querySelectorAll('.' + styles.categoryTab);
     const self = this;
@@ -388,9 +536,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     }
   }
 
-  /**
-   * Attach click event listeners to FAQ items
-   */
   private _attachEventListeners(): void {
     const faqItems = this.domElement.querySelectorAll('.' + styles.faqItem);
     const questions = this.domElement.querySelectorAll('.' + styles.faqQuestion);
@@ -399,7 +544,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     for (let index = 0; index < questions.length; index++) {
       const questionElement = questions[index] as HTMLElement;
 
-      // Add hover effect
       questionElement.addEventListener('mouseenter', function(): void {
         const hoverBg = questionElement.getAttribute('data-hover-bg');
         if (hoverBg) {
@@ -411,13 +555,11 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
         questionElement.style.backgroundColor = '';
       });
 
-      // Add click handler for accordion - use closure to capture index
       (function(idx: number): void {
         questionElement.addEventListener('click', function(): void {
           const faqItem = faqItems[idx];
 
           if (!self.properties.allowMultipleExpanded) {
-            // Close all other items
             for (let i = 0; i < faqItems.length; i++) {
               if (i !== idx && faqItems[i].classList.contains(styles.expanded)) {
                 faqItems[i].classList.remove(styles.expanded);
@@ -425,7 +567,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
             }
           }
 
-          // Toggle current item
           if (faqItem.classList.contains(styles.expanded)) {
             faqItem.classList.remove(styles.expanded);
           } else {
@@ -436,9 +577,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     }
   }
 
-  /**
-   * Escape HTML to prevent XSS
-   */
   private _escapeHtml(text: string): string {
     if (!text) {
       return '';
@@ -448,27 +586,18 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     return div.innerHTML;
   }
 
-  /**
-   * Format description text (handle rich text or plain text)
-   */
   private _formatDescription(description: string): string {
     if (!description) {
       return '';
     }
 
-    // Check if it's HTML content (from multi-line rich text field)
     if (description.indexOf('<') !== -1 && description.indexOf('>') !== -1) {
-      // Return as-is for HTML content
       return description;
     }
 
-    // Plain text - convert line breaks to <br>
     return this._escapeHtml(description).replace(/\n/g, '<br>');
   }
 
-  /**
-   * Load all lists from the current site
-   */
   private _loadLists(): Promise<void> {
     return this._spService.getLists()
       .then((lists: IListInfo[]) => {
@@ -480,9 +609,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       });
   }
 
-  /**
-   * Load columns for the selected list
-   */
   private _loadColumns(): Promise<void> {
     if (!this.properties.selectedList) {
       this._columns = [];
@@ -499,9 +625,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       });
   }
 
-  /**
-   * Load FAQ items from the selected list
-   */
   private _loadFaqItems(): Promise<void> {
     if (!this.properties.selectedList || !this.properties.titleColumn || !this.properties.descriptionColumn) {
       this._faqItems = [];
@@ -517,7 +640,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       .then((items: IFaqItem[]) => {
         this._faqItems = items;
         this._extractCategories();
-        // Reset to All if current category no longer exists
         let categoryExists = false;
         for (let i = 0; i < this._categories.length; i++) {
           if (this._categories[i] === this._selectedCategory) {
@@ -536,36 +658,27 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       });
   }
 
-  /**
-   * Get data version
-   */
   protected get dataVersion(): Version {
     return Version.parse('1.0');
   }
 
-  /**
-   * Handle property pane field changes
-   */
   protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: string | boolean, newValue: string | boolean): void {
     const self = this;
 
     if (propertyPath === 'selectedList' && newValue !== oldValue) {
-      // Reset column selections when list changes
       this.properties.titleColumn = '';
       this.properties.descriptionColumn = '';
       this.properties.categoryColumn = '';
       this._faqItems = [];
       this._categories = [];
       this._selectedCategory = 'All';
+      this._searchQuery = '';
 
-      // Load columns for new list
       this._loadColumns().then(function(): void {
-        // Refresh property pane to show new columns
         self.context.propertyPane.refresh();
         self.render();
       });
     } else if ((propertyPath === 'titleColumn' || propertyPath === 'descriptionColumn' || propertyPath === 'categoryColumn') && newValue !== oldValue) {
-      // Reload FAQ items when columns change
       this._loadFaqItems().then(function(): void {
         self.render();
       });
@@ -574,9 +687,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     }
   }
 
-  /**
-   * Get dropdown options for lists
-   */
   private _getListOptions(): IPropertyPaneDropdownOption[] {
     const options: IPropertyPaneDropdownOption[] = [
       { key: '', text: '-- Select a list --' }
@@ -589,9 +699,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     return options;
   }
 
-  /**
-   * Get dropdown options for title columns (text columns only)
-   */
   private _getTitleColumnOptions(): IPropertyPaneDropdownOption[] {
     const options: IPropertyPaneDropdownOption[] = [
       { key: '', text: '-- Select a column --' }
@@ -607,9 +714,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     return options;
   }
 
-  /**
-   * Get dropdown options for description columns (text and multi-line text columns)
-   */
   private _getDescriptionColumnOptions(): IPropertyPaneDropdownOption[] {
     const options: IPropertyPaneDropdownOption[] = [
       { key: '', text: '-- Select a column --' }
@@ -626,9 +730,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     return options;
   }
 
-  /**
-   * Get dropdown options for category column (text and choice columns)
-   */
   private _getCategoryColumnOptions(): IPropertyPaneDropdownOption[] {
     const options: IPropertyPaneDropdownOption[] = [
       { key: '', text: '-- No category (disable tabs) --' }
@@ -644,9 +745,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     return options;
   }
 
-  /**
-   * Get font size options
-   */
   private _getFontSizeOptions(): IPropertyPaneDropdownOption[] {
     return [
       { key: '10', text: '10px - Extra Small' },
@@ -661,9 +759,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     ];
   }
 
-  /**
-   * Configure the property pane
-   */
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -709,6 +804,45 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
                   label: 'FAQ Answer Font Size',
                   options: this._getFontSizeOptions(),
                   selectedKey: this.properties.faqDescriptionFontSize || '14'
+                })
+              ]
+            },
+            {
+              groupName: 'Search Settings',
+              groupFields: [
+                PropertyPaneToggle('enableSearch', {
+                  label: 'Enable Search',
+                  onText: 'Yes',
+                  offText: 'No'
+                }),
+                PropertyPaneToggle('searchInHeader', {
+                  label: 'Search in Header',
+                  onText: 'Yes (in header)',
+                  offText: 'No (below header)',
+                  disabled: !this.properties.enableSearch
+                }),
+                PropertyPaneToggle('highlightSearchMatches', {
+                  label: 'Highlight Search Matches',
+                  onText: 'Yes',
+                  offText: 'No',
+                  disabled: !this.properties.enableSearch
+                }),
+                PropertyPaneToggle('searchInAnswers', {
+                  label: 'Search in Answers',
+                  onText: 'Yes (titles & answers)',
+                  offText: 'No (titles only)',
+                  disabled: !this.properties.enableSearch
+                }),
+                PropertyPaneToggle('showResultsCount', {
+                  label: 'Show Results Count',
+                  onText: 'Yes',
+                  offText: 'No',
+                  disabled: !this.properties.enableSearch
+                }),
+                PropertyPaneTextField('searchPlaceholder', {
+                  label: 'Search Placeholder Text',
+                  placeholder: 'Search FAQs...',
+                  disabled: !this.properties.enableSearch
                 })
               ]
             },

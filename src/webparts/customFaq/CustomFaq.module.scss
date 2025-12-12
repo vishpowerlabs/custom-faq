@@ -11,7 +11,6 @@
   overflow: hidden;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   
-  /* Theme-aware background - uses CSS variable set by ThemeProvider */
   background-color: "[theme:bodyBackground, default: #ffffff]";
   background-color: var(--bodyBackground, #ffffff);
 }
@@ -25,7 +24,6 @@
   color: "[theme:white, default: #ffffff]";
   color: var(--white, #ffffff);
   
-  /* Gradient background using theme colors */
   background: "[theme:themePrimary, default: #0078d4]";
   background: var(--themePrimary, #0078d4);
 }
@@ -40,6 +38,200 @@
   margin: 0;
   opacity: 0.9;
   line-height: 1.4;
+}
+
+/* ============================================
+   Search Section (Below Header)
+   ============================================ */
+
+.searchSection {
+  padding: 16px 20px;
+  border-bottom: 1px solid "[theme:bodyDivider, default: #edebe9]";
+  border-bottom-color: var(--bodyDivider, #edebe9);
+  
+  background-color: "[theme:neutralLighter, default: #f4f4f4]";
+  background-color: var(--neutralLighter, #f4f4f4);
+}
+
+.searchContainer {
+  position: relative;
+  max-width: 100%;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+  
+  color: "[theme:bodySubtext, default: #605e5c]";
+  color: var(--bodySubtext, #605e5c);
+}
+
+.searchInput {
+  width: 100%;
+  padding: 10px 40px 10px 40px;
+  border: 1px solid "[theme:inputBorder, default: #8a8886]";
+  border-color: var(--inputBorder, #8a8886);
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  
+  background-color: "[theme:inputBackground, default: #ffffff]";
+  background-color: var(--inputBackground, #ffffff);
+  
+  color: "[theme:bodyText, default: #323130]";
+  color: var(--bodyText, #323130);
+  
+  &::placeholder {
+    color: "[theme:inputPlaceholderText, default: #a19f9d]";
+    color: var(--inputPlaceholderText, #a19f9d);
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: "[theme:themePrimary, default: #0078d4]";
+    border-color: var(--themePrimary, #0078d4);
+    box-shadow: 0 0 0 1px var(--themePrimary, #0078d4);
+  }
+}
+
+.clearButton {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 4px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  color: "[theme:bodySubtext, default: #605e5c]";
+  color: var(--bodySubtext, #605e5c);
+  
+  &:hover {
+    background-color: "[theme:neutralLight, default: #edebe9]";
+    background-color: var(--neutralLight, #edebe9);
+  }
+  
+  &:focus {
+    outline: 2px solid "[theme:focusBorder, default: #0078d4]";
+    outline-color: var(--focusBorder, #0078d4);
+    outline-offset: 1px;
+  }
+}
+
+/* ============================================
+   Search in Header
+   ============================================ */
+
+.searchInHeader {
+  margin-top: 16px;
+  
+  .searchContainer {
+    max-width: 100%;
+  }
+  
+  .searchInput {
+    background-color: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    
+    &::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+    
+    &:focus {
+      background-color: #ffffff;
+      color: "[theme:bodyText, default: #323130]";
+      color: var(--bodyText, #323130);
+      border-color: #ffffff;
+      box-shadow: none;
+      
+      &::placeholder {
+        color: "[theme:inputPlaceholderText, default: #a19f9d]";
+        color: var(--inputPlaceholderText, #a19f9d);
+      }
+    }
+  }
+  
+  .searchIcon {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  
+  .searchInput:focus ~ .searchIcon,
+  .searchContainer:focus-within .searchIcon {
+    color: "[theme:bodySubtext, default: #605e5c]";
+    color: var(--bodySubtext, #605e5c);
+  }
+  
+  .clearButton {
+    color: rgba(255, 255, 255, 0.7);
+    
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+  }
+  
+  .searchInput:focus ~ .clearButton,
+  .searchContainer:focus-within .clearButton {
+    color: "[theme:bodySubtext, default: #605e5c]";
+    color: var(--bodySubtext, #605e5c);
+    
+    &:hover {
+      background-color: "[theme:neutralLight, default: #edebe9]";
+      background-color: var(--neutralLight, #edebe9);
+    }
+  }
+}
+
+/* ============================================
+   Results Info
+   ============================================ */
+
+.resultsInfo {
+  padding: 8px 20px;
+  font-size: 12px;
+  
+  color: "[theme:bodySubtext, default: #605e5c]";
+  color: var(--bodySubtext, #605e5c);
+  
+  background-color: "[theme:neutralLighter, default: #f4f4f4]";
+  background-color: var(--neutralLighter, #f4f4f4);
+  
+  border-bottom: 1px solid "[theme:bodyDivider, default: #edebe9]";
+  border-bottom-color: var(--bodyDivider, #edebe9);
+  
+  strong {
+    color: "[theme:bodyText, default: #323130]";
+    color: var(--bodyText, #323130);
+  }
+}
+
+/* ============================================
+   Search Highlight
+   ============================================ */
+
+.searchHighlight {
+  background-color: #fff3cd;
+  padding: 1px 2px;
+  border-radius: 2px;
+}
+
+/* High contrast mode */
+@media (forced-colors: active) {
+  .searchHighlight {
+    background-color: Highlight;
+    color: HighlightText;
+  }
 }
 
 /* ============================================
@@ -58,7 +250,6 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   
-  /* Hide scrollbar but keep functionality */
   scrollbar-width: none;
   -ms-overflow-style: none;
   
@@ -189,7 +380,6 @@
   }
 }
 
-/* Rotated chevron when expanded */
 .faqItem.expanded .faqChevron {
   transform: rotate(180deg);
 }
@@ -206,9 +396,8 @@
   transition: max-height 0.3s ease, opacity 0.3s ease, padding 0.3s ease;
 }
 
-/* Expanded state */
 .faqItem.expanded .faqAnswer {
-  max-height: 2000px; /* Large enough to accommodate content */
+  max-height: 2000px;
   opacity: 1;
   padding: 0 28px 20px 28px;
 }
@@ -220,7 +409,6 @@
   color: "[theme:bodySubtext, default: #605e5c]";
   color: var(--bodySubtext, #605e5c);
   
-  /* Style for rich text content */
   p {
     margin: 0 0 12px 0;
     
@@ -376,7 +564,6 @@
    Accessibility Improvements
    ============================================ */
 
-/* High contrast mode support */
 @media (forced-colors: active) {
   .faqQuestion {
     border: 1px solid ButtonText;
@@ -413,9 +600,12 @@
     background-color: Highlight;
     color: HighlightText;
   }
+  
+  .searchInput {
+    border: 1px solid ButtonText;
+  }
 }
 
-/* Focus visible for keyboard navigation */
 .faqQuestion:focus-visible {
   outline: 2px solid "[theme:focusBorder, default: #0078d4]";
   outline-color: var(--focusBorder, #0078d4);
@@ -467,6 +657,18 @@
     padding: 6px 12px;
     font-size: 13px;
   }
+  
+  .searchSection {
+    padding: 12px 16px;
+  }
+  
+  .searchInHeader {
+    margin-top: 12px;
+  }
+  
+  .resultsInfo {
+    padding: 6px 16px;
+  }
 }
 
 /* ============================================
@@ -501,5 +703,17 @@
   
   .categoryTabs {
     display: none;
+  }
+  
+  .searchSection,
+  .searchInHeader,
+  .resultsInfo {
+    display: none;
+  }
+  
+  .searchHighlight {
+    background-color: #ffff00 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }

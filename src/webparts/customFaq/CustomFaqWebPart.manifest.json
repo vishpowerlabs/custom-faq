@@ -41,7 +41,13 @@
         "webpartTitleFontSize": "24",
         "webpartDescriptionFontSize": "14",
         "faqTitleFontSize": "16",
-        "faqDescriptionFontSize": "14"
+        "faqDescriptionFontSize": "14",
+        "enableSearch": true,
+        "searchInHeader": false,
+        "highlightSearchMatches": true,
+        "searchInAnswers": true,
+        "showResultsCount": true,
+        "searchPlaceholder": "Search FAQs..."
       }
     }
   ]

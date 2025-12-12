@@ -36,7 +36,13 @@
         "webpartTitleFontSize": "24",
         "webpartDescriptionFontSize": "14",
         "faqTitleFontSize": "16",
-        "faqDescriptionFontSize": "14"
+        "faqDescriptionFontSize": "14",
+        "enableSearch": true,
+        "searchInHeader": false,
+        "highlightSearchMatches": true,
+        "searchInAnswers": true,
+        "showResultsCount": true,
+        "searchPlaceholder": "Search FAQs..."
       }
     }
   ],
@@ -46,7 +52,7 @@
     "scriptResources": {
       "custom-faq-web-part": {
         "type": "path",
-        "path": "custom-faq-web-part_bf8f27a6502e80d670b1.js"
+        "path": "custom-faq-web-part.js"
       },
       "@microsoft/sp-core-library": {
         "type": "component",

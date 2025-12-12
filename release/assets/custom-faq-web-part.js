@@ -16,32 +16,42 @@ __webpack_require__.r(__webpack_exports__);
 // Imports
 
 
-_node_modules_microsoft_sp_css_loader_node_modules_microsoft_load_themed_styles_lib_es6_index_js__WEBPACK_IMPORTED_MODULE_0__.loadStyles(".customFaq_aaee6cf9{background-color:\"[theme:bodyBackground, default: #ffffff]\";background-color:var(--bodyBackground,#fff);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08);font-family:Segoe UI,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif;overflow:hidden}.faqHeader_aaee6cf9{background:\"[theme:themePrimary, default: #0078d4]\";background:var(--themePrimary,#0078d4);color:\"[theme:white, default: #ffffff]\";color:var(--white,#fff);padding:24px 28px}.faqTitle_aaee6cf9{font-weight:600;line-height:1.3;margin:0 0 4px}.faqDescription_aaee6cf9{line-height:1.4;margin:0;opacity:.9}.categoryTabs_aaee6cf9{-webkit-overflow-scrolling:touch;-ms-overflow-style:none;background-color:\"[theme:bodyBackground, default: #ffffff]\";background-color:var(--bodyBackground,#fff);border-bottom:1px solid;border-bottom-color:var(--neutralLight,#eaeaea);display:flex;flex-wrap:wrap;gap:4px;overflow-x:auto;padding:12px 20px;scrollbar-width:none}.categoryTabs_aaee6cf9::-webkit-scrollbar{display:none}.categoryTab_aaee6cf9{align-items:center;background:0 0;border:none;border-bottom:2px solid transparent;border-radius:4px 4px 0 0;color:\"[theme:bodyText, default: #323130]\";color:var(--bodyText,#323130);cursor:pointer;display:inline-flex;font-size:14px;font-weight:500;justify-content:center;padding:8px 16px;transition:all .2s ease;white-space:nowrap}.categoryTab_aaee6cf9:hover{background-color:\"[theme:neutralLighter, default: #f4f4f4]\";background-color:var(--neutralLighter,#f4f4f4)}.categoryTab_aaee6cf9:focus{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:-2px}.activeTab_aaee6cf9{background-color:\"[theme:neutralLighterAlt, default: #f8f8f8]\";background-color:var(--neutralLighterAlt,#f8f8f8);border-bottom-color:\"[theme:themePrimary, default: #0078d4]\";border-bottom-color:var(--themePrimary,#0078d4);color:\"[theme:themePrimary, default: #0078d4]\";color:var(--themePrimary,#0078d4);font-weight:600}.faqList_aaee6cf9{margin:0;padding:0}.faqItem_aaee6cf9{border-bottom:1px solid;border-bottom-color:var(--bodyDivider,#edebe9)}.faqItem_aaee6cf9:last-child{border-bottom:none}.faqQuestion_aaee6cf9{align-items:center;background-color:transparent;cursor:pointer;display:flex;justify-content:space-between;padding:20px 28px;transition:background-color .2s ease}.faqQuestion_aaee6cf9:hover{background-color:\"[theme:listItemBackgroundHovered, default: #f3f2f1]\";background-color:var(--listItemBackgroundHovered,#f3f2f1)}.faqQuestion_aaee6cf9:focus{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:-2px}.faqQuestionText_aaee6cf9{color:\"[theme:bodyText, default: #323130]\";color:var(--bodyText,#323130);flex:1;font-weight:600;padding-right:16px}.faqChevron_aaee6cf9{align-items:center;color:\"[theme:bodySubtext, default: #605e5c]\";color:var(--bodySubtext,#605e5c);display:flex;flex-shrink:0;height:24px;justify-content:center;transition:transform .3s ease;width:24px}.faqChevron_aaee6cf9 svg{height:16px;width:16px}.faqItem_aaee6cf9.expanded_aaee6cf9 .faqChevron_aaee6cf9{transform:rotate(180deg)}.faqAnswer_aaee6cf9{max-height:0;opacity:0;overflow:hidden;padding:0 28px;transition:max-height .3s ease,opacity .3s ease,padding .3s ease}.faqItem_aaee6cf9.expanded_aaee6cf9 .faqAnswer_aaee6cf9{max-height:2000px;opacity:1;padding:0 28px 20px}.faqAnswerContent_aaee6cf9{color:\"[theme:bodySubtext, default: #605e5c]\";color:var(--bodySubtext,#605e5c);line-height:1.6;margin-bottom:16px}.faqAnswerContent_aaee6cf9 p{margin:0 0 12px}.faqAnswerContent_aaee6cf9 p:last-child{margin-bottom:0}.faqAnswerContent_aaee6cf9 ol,.faqAnswerContent_aaee6cf9 ul{margin:0 0 12px;padding-left:24px}.faqAnswerContent_aaee6cf9 a{color:\"[theme:link, default: #0078d4]\";color:var(--link,#0078d4);text-decoration:none}.faqAnswerContent_aaee6cf9 a:hover{color:\"[theme:linkHovered, default: #004578]\";color:var(--linkHovered,#004578);text-decoration:underline}.attachments_aaee6cf9{background-color:\"[theme:neutralLighter, default: #f4f4f4]\";background-color:var(--neutralLighter,#f4f4f4);border-radius:6px;margin-top:12px;padding:12px 16px}.attachmentsLabel_aaee6cf9{align-items:center;color:\"[theme:neutralTertiary, default: #a6a6a6]\";color:var(--neutralTertiary,#a6a6a6);display:flex;font-size:.75rem;font-weight:600;gap:6px;letter-spacing:.5px;margin-bottom:8px;text-transform:uppercase}.attachmentsLabel_aaee6cf9 svg{flex-shrink:0}.attachmentLink_aaee6cf9{align-items:center;color:\"[theme:link, default: #0078d4]\";color:var(--link,#0078d4);display:flex;font-size:.875rem;gap:8px;padding:6px 0;text-decoration:none;transition:color .2s ease}.attachmentLink_aaee6cf9:hover{color:\"[theme:linkHovered, default: #004578]\";color:var(--linkHovered,#004578);text-decoration:underline}.attachmentLink_aaee6cf9:focus{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:2px}.attachmentIcon_aaee6cf9{align-items:center;display:flex;flex-shrink:0;height:20px;justify-content:center;width:20px}.attachmentIcon_aaee6cf9 svg{height:16px;width:16px}.emptyState_aaee6cf9{align-items:center;color:\"[theme:bodySubtext, default: #605e5c]\";color:var(--bodySubtext,#605e5c);display:flex;flex-direction:column;justify-content:center;padding:48px 24px;text-align:center}.emptyState_aaee6cf9 svg{margin-bottom:16px;opacity:.6}.emptyState_aaee6cf9 p{font-size:.9375rem;line-height:1.5;margin:0;max-width:300px}.loading_aaee6cf9{align-items:center;display:flex;justify-content:center;padding:48px 24px}.loading_aaee6cf9:after{animation:spin_aaee6cf9 1s linear infinite;border:3px solid;border-radius:50%;border-top:3px solid \"[theme:themeprimary, default: #0078d4]\";content:\"\";height:32px;width:32px}@keyframes spin_aaee6cf9{to{transform:rotate(1turn)}}@media (forced-colors:active){.faqQuestion_aaee6cf9{border:1px solid ButtonText}.faqItem_aaee6cf9.expanded_aaee6cf9 .faqQuestion_aaee6cf9,.faqQuestion_aaee6cf9:hover{background-color:Highlight;color:HighlightText}.attachmentLink_aaee6cf9,.attachmentLink_aaee6cf9:hover{color:LinkText}.categoryTab_aaee6cf9{border:1px solid ButtonText}.activeTab_aaee6cf9,.categoryTab_aaee6cf9:hover{background-color:Highlight;color:HighlightText}}.faqQuestion_aaee6cf9:focus-visible{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:-2px}.attachmentLink_aaee6cf9:focus-visible{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:2px}.categoryTab_aaee6cf9:focus-visible{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:-2px}@media screen and (max-width:640px){.faqHeader_aaee6cf9{padding:20px}.faqQuestion_aaee6cf9{padding:16px 20px}.faqItem_aaee6cf9.expanded_aaee6cf9 .faqAnswer_aaee6cf9{padding:0 20px 16px}.attachments_aaee6cf9{padding:10px 12px}.emptyState_aaee6cf9{padding:32px 20px}.categoryTabs_aaee6cf9{padding:10px 16px}.categoryTab_aaee6cf9{font-size:13px;padding:6px 12px}}@media print{.customFaq_aaee6cf9{border:1px solid #ccc;box-shadow:none}.faqHeader_aaee6cf9{background:#333!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.faqAnswer_aaee6cf9{max-height:none!important;opacity:1!important;padding:0 28px 20px!important}.faqChevron_aaee6cf9{display:none}.faqQuestion_aaee6cf9{cursor:default}.categoryTabs_aaee6cf9{display:none}}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGU6Ly8vVXNlcnMvdmlzaG51L0Rlc2t0b3AvY29kZWJhc2UvY3VzdG9tLWZhcS9zcmMvd2VicGFydHMvY3VzdG9tRmFxL0N1c3RvbUZhcS5tb2R1bGUuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFPQSxvQkFPRSwyREFBQSxDQUNBLDJDQUFBLENBTkEsaUJBQUEsQ0FFQSxvQ0FBQSxDQUhBLHNGQUFBLENBRUEsZUFLQSxDQU9GLG9CQU1FLG1EQUFBLENBQ0Esc0NBQUEsQ0FMQSx1Q0FBQSxDQUNBLHVCQUFBLENBRkEsaUJBTUEsQ0FHRixtQkFDRSxlQUFBLENBRUEsZUFBQSxDQURBLGNBQ0EsQ0FHRix5QkFHRSxlQUFBLENBRkEsUUFBQSxDQUNBLFVBQ0EsQ0FPRix1QkFVRSxnQ0FBQSxDQUlBLHVCQUFBLENBUEEsMkRBQUEsQ0FDQSwyQ0FBQSxDQUZBLHVCQUFBLENBQUEsK0NBQUEsQ0FMQSxZQUFBLENBQ0EsY0FBQSxDQUNBLE9BQUEsQ0FNQSxlQUFBLENBTEEsaUJBQUEsQ0FTQSxvQkFDQSxDQUVBLDBDQUNFLFlBQUEsQ0FJSixzQkFFRSxrQkFBQSxDQUtBLGNBQUEsQ0FEQSxXQUFBLENBQUEsbUNBQUEsQ0FPQSx5QkFBQSxDQUVBLDBDQUFBLENBQ0EsNkJBQUEsQ0FSQSxjQUFBLENBUEEsbUJBQUEsQ0FRQSxjQUFBLENBQ0EsZUFBQSxDQVBBLHNCQUFBLENBQ0EsZ0JBQUEsQ0FRQSx1QkFBQSxDQURBLGtCQUtBLENBRUEsNEJBQ0UsMkRBQUEsQ0FDQSw4Q0FBQSxDQUdGLDRCQUNFLGlCQUFBLENBQ0Esd0NBQUEsQ0FDQSxtQkFBQSxDQUlKLG9CQVNFLDhEQUFBLENBQ0EsaURBQUEsQ0FKQSw0REFBQSxDQUNBLCtDQUFBLENBSkEsOENBQUEsQ0FDQSxpQ0FBQSxDQUhBLGVBU0EsQ0FPRixrQkFFRSxRQUFBLENBREEsU0FDQSxDQU9GLGtCQUVFLHVCQUFBLENBQUEsOENBQUEsQ0FFQSw2QkFDRSxrQkFBQSxDQVFKLHNCQUVFLGtCQUFBLENBTUEsNEJBQUEsQ0FIQSxjQUFBLENBSkEsWUFBQSxDQUVBLDZCQUFBLENBQ0EsaUJBQUEsQ0FFQSxvQ0FFQSxDQUVBLDRCQUNFLHNFQUFBLENBQ0EseURBQUEsQ0FHRiw0QkFDRSxpQkFBQSxDQUNBLHdDQUFBLENBQ0EsbUJBQUEsQ0FJSiwwQkFLRSwwQ0FBQSxDQUNBLDZCQUFBLENBSkEsTUFBQSxDQURBLGVBQUEsQ0FFQSxrQkFHQSxDQU9GLHFCQUlFLGtCQUFBLENBS0EsNkNBQUEsQ0FDQSxnQ0FBQSxDQVBBLFlBQUEsQ0FHQSxhQUFBLENBSkEsV0FBQSxDQUdBLHNCQUFBLENBRUEsNkJBQUEsQ0FOQSxVQVNBLENBRUEseUJBRUUsV0FBQSxDQURBLFVBQ0EsQ0FLSix5REFDRSx3QkFBQSxDQU9GLG9CQUNFLFlBQUEsQ0FHQSxTQUFBLENBRkEsZUFBQSxDQUNBLGNBQUEsQ0FFQSxnRUFBQSxDQUlGLHdEQUNFLGlCQUFBLENBQ0EsU0FBQSxDQUNBLG1CQUFBLENBR0YsMkJBSUUsNkNBQUEsQ0FDQSxnQ0FBQSxDQUpBLGVBQUEsQ0FDQSxrQkFHQSxDQUdBLDZCQUNFLGVBQUEsQ0FFQSx3Q0FDRSxlQUFBLENBSUosNERBQ0UsZUFBQSxDQUNBLGlCQUFBLENBR0YsNkJBQ0Usc0NBQUEsQ0FDQSx5QkFBQSxDQUNBLG9CQUFBLENBRUEsbUNBQ0UsNkNBQUEsQ0FDQSxnQ0FBQSxDQUNBLHlCQUFBLENBU04sc0JBS0UsMkRBQUEsQ0FDQSw4Q0FBQSxDQUxBLGlCQUFBLENBRUEsZUFBQSxDQURBLGlCQUlBLENBR0YsMkJBT0Usa0JBQUEsQ0FHQSxpREFBQSxDQUNBLG9DQUFBLENBTEEsWUFBQSxDQUxBLGdCQUFBLENBQ0EsZUFBQSxDQU1BLE9BQUEsQ0FKQSxtQkFBQSxDQUNBLGlCQUFBLENBRkEsd0JBUUEsQ0FFQSwrQkFDRSxhQUFBLENBSUoseUJBRUUsa0JBQUEsQ0FPQSxzQ0FBQSxDQUNBLHlCQUFBLENBVEEsWUFBQSxDQUdBLGlCQUFBLENBREEsT0FBQSxDQUdBLGFBQUEsQ0FEQSxvQkFBQSxDQUVBLHlCQUdBLENBRUEsK0JBQ0UsNkNBQUEsQ0FDQSxnQ0FBQSxDQUNBLHlCQUFBLENBR0YsK0JBQ0UsaUJBQUEsQ0FDQSx3Q0FBQSxDQUNBLGtCQUFBLENBSUoseUJBSUUsa0JBQUEsQ0FEQSxZQUFBLENBR0EsYUFBQSxDQUpBLFdBQUEsQ0FHQSxzQkFBQSxDQUpBLFVBS0EsQ0FFQSw2QkFFRSxXQUFBLENBREEsVUFDQSxDQVFKLHFCQUdFLGtCQUFBLENBS0EsNkNBQUEsQ0FDQSxnQ0FBQSxDQVJBLFlBQUEsQ0FDQSxxQkFBQSxDQUVBLHNCQUFBLENBQ0EsaUJBQUEsQ0FDQSxpQkFHQSxDQUVBLHlCQUNFLGtCQUFBLENBQ0EsVUFBQSxDQUdGLHVCQUVFLGtCQUFBLENBRUEsZUFBQSxDQUhBLFFBQUEsQ0FFQSxlQUNBLENBUUosa0JBRUUsa0JBQUEsQ0FEQSxZQUFBLENBRUEsc0JBQUEsQ0FDQSxpQkFBQSxDQUVBLHdCQU9FLDBDQUFBLENBRkEsZ0JBQUEsQ0FDQSxpQkFBQSxDQURBLDZEQUFBLENBSkEsVUFBQSxDQUVBLFdBQUEsQ0FEQSxVQUtBLENBSUoseUJBQ0UsR0FDRSx1QkFBQSxDQUFBLENBU0osOEJBQ0Usc0JBQ0UsMkJBQUEsQ0FRRixzRkFDRSwwQkFBQSxDQUNBLG1CQUFBLENBTUEsd0RBQ0UsY0FBQSxDQUlKLHNCQUNFLDJCQUFBLENBUUYsZ0RBQ0UsMEJBQUEsQ0FDQSxtQkFBQSxDQUFBLENBS0osb0NBQ0UsaUJBQUEsQ0FDQSx3Q0FBQSxDQUNBLG1CQUFBLENBR0YsdUNBQ0UsaUJBQUEsQ0FDQSx3Q0FBQSxDQUNBLGtCQUFBLENBR0Ysb0NBQ0UsaUJBQUEsQ0FDQSx3Q0FBQSxDQUNBLG1CQUFBLENBT0Ysb0NBQ0Usb0JBQ0UsWUFBQSxDQUdGLHNCQUNFLGlCQUFBLENBR0Ysd0RBQ0UsbUJBQUEsQ0FHRixzQkFDRSxpQkFBQSxDQUdGLHFCQUNFLGlCQUFBLENBR0YsdUJBQ0UsaUJBQUEsQ0FHRixzQkFFRSxjQUFBLENBREEsZ0JBQ0EsQ0FBQSxDQVFKLGFBQ0Usb0JBRUUscUJBQUEsQ0FEQSxlQUNBLENBR0Ysb0JBQ0UseUJBQUEsQ0FDQSxnQ0FBQSxDQUNBLHdCQUFBLENBR0Ysb0JBQ0UseUJBQUEsQ0FDQSxtQkFBQSxDQUNBLDZCQUFBLENBR0YscUJBQ0UsWUFBQSxDQUdGLHNCQUNFLGNBQUEsQ0FHRix1QkFDRSxZQUFBLENBQUEiLCJmaWxlIjoiQ3VzdG9tRmFxLm1vZHVsZS5jc3MifQ== */", true);
+_node_modules_microsoft_sp_css_loader_node_modules_microsoft_load_themed_styles_lib_es6_index_js__WEBPACK_IMPORTED_MODULE_0__.loadStyles(".customFaq_f7a6a6e3{background-color:\"[theme:bodyBackground, default: #ffffff]\";background-color:var(--bodyBackground,#fff);border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,.08);font-family:Segoe UI,-apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif;overflow:hidden}.faqHeader_f7a6a6e3{background:\"[theme:themePrimary, default: #0078d4]\";background:var(--themePrimary,#0078d4);color:\"[theme:white, default: #ffffff]\";color:var(--white,#fff);padding:24px 28px}.faqTitle_f7a6a6e3{font-weight:600;line-height:1.3;margin:0 0 4px}.faqDescription_f7a6a6e3{line-height:1.4;margin:0;opacity:.9}.searchSection_f7a6a6e3{background-color:\"[theme:neutralLighter, default: #f4f4f4]\";background-color:var(--neutralLighter,#f4f4f4);border-bottom:1px solid;border-bottom-color:var(--bodyDivider,#edebe9);padding:16px 20px}.searchContainer_f7a6a6e3{max-width:100%;position:relative}.searchIcon_f7a6a6e3{color:\"[theme:bodySubtext, default: #605e5c]\";color:var(--bodySubtext,#605e5c);height:16px;left:12px;pointer-events:none;position:absolute;top:50%;transform:translateY(-50%);width:16px}.searchInput_f7a6a6e3{background-color:\"[theme:inputBackground, default: #ffffff]\";background-color:var(--inputBackground,#fff);border:1px solid;border-color:var(--inputBorder,#8a8886);border-radius:4px;color:\"[theme:bodyText, default: #323130]\";color:var(--bodyText,#323130);font-family:inherit;font-size:14px;padding:10px 40px;transition:border-color .2s,box-shadow .2s;width:100%}.searchInput:-ms-input-placeholder{color:\"[theme:inputPlaceholderText, default: #a19f9d]\";color:var(--inputPlaceholderText,#a19f9d)}.searchInput_f7a6a6e3:-ms-input-placeholder{color:\"[theme:inputPlaceholderText, default: #a19f9d]\";color:var(--inputPlaceholderText,#a19f9d)}.searchInput_f7a6a6e3::placeholder{color:\"[theme:inputPlaceholderText, default: #a19f9d]\";color:var(--inputPlaceholderText,#a19f9d)}.searchInput_f7a6a6e3:focus{border-color:\"[theme:themePrimary, default: #0078d4]\";border-color:var(--themePrimary,#0078d4);box-shadow:0 0 0 1px var(--themePrimary,#0078d4);outline:0}.clearButton_f7a6a6e3{align-items:center;background:0 0;border:none;border-radius:2px;color:\"[theme:bodySubtext, default: #605e5c]\";color:var(--bodySubtext,#605e5c);cursor:pointer;display:flex;justify-content:center;padding:4px;position:absolute;right:8px;top:50%;transform:translateY(-50%)}.clearButton_f7a6a6e3:hover{background-color:\"[theme:neutralLight, default: #edebe9]\";background-color:var(--neutralLight,#edebe9)}.clearButton_f7a6a6e3:focus{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:1px}.searchInHeader_f7a6a6e3{margin-top:16px}.searchInHeader_f7a6a6e3 .searchContainer_f7a6a6e3{max-width:100%}.searchInHeader_f7a6a6e3 .searchInput_f7a6a6e3{background-color:hsla(0,0%,100%,.15);border-color:hsla(0,0%,100%,.3);color:#fff}.searchInHeader .searchInput:-ms-input-placeholder{color:hsla(0,0%,100%,.7)}.searchInHeader_f7a6a6e3 .searchInput_f7a6a6e3:-ms-input-placeholder{color:hsla(0,0%,100%,.7)}.searchInHeader_f7a6a6e3 .searchInput_f7a6a6e3::placeholder{color:hsla(0,0%,100%,.7)}.searchInHeader_f7a6a6e3 .searchInput_f7a6a6e3:focus{background-color:#fff;border-color:#fff;box-shadow:none;color:\"[theme:bodyText, default: #323130]\";color:var(--bodyText,#323130)}.searchInHeader .searchInput:focus:-ms-input-placeholder{color:\"[theme:inputPlaceholderText, default: #a19f9d]\";color:var(--inputPlaceholderText,#a19f9d)}.searchInHeader_f7a6a6e3 .searchInput_f7a6a6e3:focus:-ms-input-placeholder{color:\"[theme:inputPlaceholderText, default: #a19f9d]\";color:var(--inputPlaceholderText,#a19f9d)}.searchInHeader_f7a6a6e3 .searchInput_f7a6a6e3:focus::placeholder{color:\"[theme:inputPlaceholderText, default: #a19f9d]\";color:var(--inputPlaceholderText,#a19f9d)}.searchInHeader_f7a6a6e3 .searchIcon_f7a6a6e3{color:hsla(0,0%,100%,.7)}.searchInHeader_f7a6a6e3 .searchContainer_f7a6a6e3:focus-within .searchIcon_f7a6a6e3,.searchInHeader_f7a6a6e3 .searchInput_f7a6a6e3:focus~.searchIcon_f7a6a6e3{color:\"[theme:bodySubtext, default: #605e5c]\";color:var(--bodySubtext,#605e5c)}.searchInHeader_f7a6a6e3 .clearButton_f7a6a6e3{color:hsla(0,0%,100%,.7)}.searchInHeader_f7a6a6e3 .clearButton_f7a6a6e3:hover{background-color:hsla(0,0%,100%,.2)}.searchInHeader_f7a6a6e3 .searchContainer_f7a6a6e3:focus-within .clearButton_f7a6a6e3,.searchInHeader_f7a6a6e3 .searchInput_f7a6a6e3:focus~.clearButton_f7a6a6e3{color:\"[theme:bodySubtext, default: #605e5c]\";color:var(--bodySubtext,#605e5c)}.searchInHeader_f7a6a6e3 .searchContainer_f7a6a6e3:focus-within .clearButton_f7a6a6e3:hover,.searchInHeader_f7a6a6e3 .searchInput_f7a6a6e3:focus~.clearButton_f7a6a6e3:hover{background-color:\"[theme:neutralLight, default: #edebe9]\";background-color:var(--neutralLight,#edebe9)}.resultsInfo_f7a6a6e3{background-color:\"[theme:neutralLighter, default: #f4f4f4]\";background-color:var(--neutralLighter,#f4f4f4);border-bottom:1px solid;border-bottom-color:var(--bodyDivider,#edebe9);color:\"[theme:bodySubtext, default: #605e5c]\";color:var(--bodySubtext,#605e5c);font-size:12px;padding:8px 20px}.resultsInfo_f7a6a6e3 strong{color:\"[theme:bodyText, default: #323130]\";color:var(--bodyText,#323130)}.searchHighlight_f7a6a6e3{background-color:#fff3cd;border-radius:2px;padding:1px 2px}@media (forced-colors:active){.searchHighlight_f7a6a6e3{background-color:Highlight;color:HighlightText}}.categoryTabs_f7a6a6e3{-webkit-overflow-scrolling:touch;-ms-overflow-style:none;background-color:\"[theme:bodyBackground, default: #ffffff]\";background-color:var(--bodyBackground,#fff);border-bottom:1px solid;border-bottom-color:var(--neutralLight,#eaeaea);display:flex;flex-wrap:wrap;gap:4px;overflow-x:auto;padding:12px 20px;scrollbar-width:none}.categoryTabs_f7a6a6e3::-webkit-scrollbar{display:none}.categoryTab_f7a6a6e3{align-items:center;background:0 0;border:none;border-bottom:2px solid transparent;border-radius:4px 4px 0 0;color:\"[theme:bodyText, default: #323130]\";color:var(--bodyText,#323130);cursor:pointer;display:inline-flex;font-size:14px;font-weight:500;justify-content:center;padding:8px 16px;transition:all .2s ease;white-space:nowrap}.categoryTab_f7a6a6e3:hover{background-color:\"[theme:neutralLighter, default: #f4f4f4]\";background-color:var(--neutralLighter,#f4f4f4)}.categoryTab_f7a6a6e3:focus{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:-2px}.activeTab_f7a6a6e3{background-color:\"[theme:neutralLighterAlt, default: #f8f8f8]\";background-color:var(--neutralLighterAlt,#f8f8f8);border-bottom-color:\"[theme:themePrimary, default: #0078d4]\";border-bottom-color:var(--themePrimary,#0078d4);color:\"[theme:themePrimary, default: #0078d4]\";color:var(--themePrimary,#0078d4);font-weight:600}.faqList_f7a6a6e3{margin:0;padding:0}.faqItem_f7a6a6e3{border-bottom:1px solid;border-bottom-color:var(--bodyDivider,#edebe9)}.faqItem_f7a6a6e3:last-child{border-bottom:none}.faqQuestion_f7a6a6e3{align-items:center;background-color:transparent;cursor:pointer;display:flex;justify-content:space-between;padding:20px 28px;transition:background-color .2s ease}.faqQuestion_f7a6a6e3:hover{background-color:\"[theme:listItemBackgroundHovered, default: #f3f2f1]\";background-color:var(--listItemBackgroundHovered,#f3f2f1)}.faqQuestion_f7a6a6e3:focus{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:-2px}.faqQuestionText_f7a6a6e3{color:\"[theme:bodyText, default: #323130]\";color:var(--bodyText,#323130);flex:1;font-weight:600;padding-right:16px}.faqChevron_f7a6a6e3{align-items:center;color:\"[theme:bodySubtext, default: #605e5c]\";color:var(--bodySubtext,#605e5c);display:flex;flex-shrink:0;height:24px;justify-content:center;transition:transform .3s ease;width:24px}.faqChevron_f7a6a6e3 svg{height:16px;width:16px}.faqItem_f7a6a6e3.expanded_f7a6a6e3 .faqChevron_f7a6a6e3{transform:rotate(180deg)}.faqAnswer_f7a6a6e3{max-height:0;opacity:0;overflow:hidden;padding:0 28px;transition:max-height .3s ease,opacity .3s ease,padding .3s ease}.faqItem_f7a6a6e3.expanded_f7a6a6e3 .faqAnswer_f7a6a6e3{max-height:2000px;opacity:1;padding:0 28px 20px}.faqAnswerContent_f7a6a6e3{color:\"[theme:bodySubtext, default: #605e5c]\";color:var(--bodySubtext,#605e5c);line-height:1.6;margin-bottom:16px}.faqAnswerContent_f7a6a6e3 p{margin:0 0 12px}.faqAnswerContent_f7a6a6e3 p:last-child{margin-bottom:0}.faqAnswerContent_f7a6a6e3 ol,.faqAnswerContent_f7a6a6e3 ul{margin:0 0 12px;padding-left:24px}.faqAnswerContent_f7a6a6e3 a{color:\"[theme:link, default: #0078d4]\";color:var(--link,#0078d4);text-decoration:none}.faqAnswerContent_f7a6a6e3 a:hover{color:\"[theme:linkHovered, default: #004578]\";color:var(--linkHovered,#004578);text-decoration:underline}.attachments_f7a6a6e3{background-color:\"[theme:neutralLighter, default: #f4f4f4]\";background-color:var(--neutralLighter,#f4f4f4);border-radius:6px;margin-top:12px;padding:12px 16px}.attachmentsLabel_f7a6a6e3{align-items:center;color:\"[theme:neutralTertiary, default: #a6a6a6]\";color:var(--neutralTertiary,#a6a6a6);display:flex;font-size:.75rem;font-weight:600;gap:6px;letter-spacing:.5px;margin-bottom:8px;text-transform:uppercase}.attachmentsLabel_f7a6a6e3 svg{flex-shrink:0}.attachmentLink_f7a6a6e3{align-items:center;color:\"[theme:link, default: #0078d4]\";color:var(--link,#0078d4);display:flex;font-size:.875rem;gap:8px;padding:6px 0;text-decoration:none;transition:color .2s ease}.attachmentLink_f7a6a6e3:hover{color:\"[theme:linkHovered, default: #004578]\";color:var(--linkHovered,#004578);text-decoration:underline}.attachmentLink_f7a6a6e3:focus{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:2px}.attachmentIcon_f7a6a6e3{align-items:center;display:flex;flex-shrink:0;height:20px;justify-content:center;width:20px}.attachmentIcon_f7a6a6e3 svg{height:16px;width:16px}.emptyState_f7a6a6e3{align-items:center;color:\"[theme:bodySubtext, default: #605e5c]\";color:var(--bodySubtext,#605e5c);display:flex;flex-direction:column;justify-content:center;padding:48px 24px;text-align:center}.emptyState_f7a6a6e3 svg{margin-bottom:16px;opacity:.6}.emptyState_f7a6a6e3 p{font-size:.9375rem;line-height:1.5;margin:0;max-width:300px}.loading_f7a6a6e3{align-items:center;display:flex;justify-content:center;padding:48px 24px}.loading_f7a6a6e3:after{animation:spin_f7a6a6e3 1s linear infinite;border:3px solid;border-radius:50%;border-top:3px solid \"[theme:themeprimary, default: #0078d4]\";content:\"\";height:32px;width:32px}@keyframes spin_f7a6a6e3{to{transform:rotate(1turn)}}@media (forced-colors:active){.faqQuestion_f7a6a6e3{border:1px solid ButtonText}.faqItem_f7a6a6e3.expanded_f7a6a6e3 .faqQuestion_f7a6a6e3,.faqQuestion_f7a6a6e3:hover{background-color:Highlight;color:HighlightText}.attachmentLink_f7a6a6e3,.attachmentLink_f7a6a6e3:hover{color:LinkText}.categoryTab_f7a6a6e3{border:1px solid ButtonText}.activeTab_f7a6a6e3,.categoryTab_f7a6a6e3:hover{background-color:Highlight;color:HighlightText}.searchInput_f7a6a6e3{border:1px solid ButtonText}}.faqQuestion_f7a6a6e3:focus-visible{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:-2px}.attachmentLink_f7a6a6e3:focus-visible{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:2px}.categoryTab_f7a6a6e3:focus-visible{outline:2px solid;outline-color:var(--focusBorder,#0078d4);outline-offset:-2px}@media screen and (max-width:640px){.faqHeader_f7a6a6e3{padding:20px}.faqQuestion_f7a6a6e3{padding:16px 20px}.faqItem_f7a6a6e3.expanded_f7a6a6e3 .faqAnswer_f7a6a6e3{padding:0 20px 16px}.attachments_f7a6a6e3{padding:10px 12px}.emptyState_f7a6a6e3{padding:32px 20px}.categoryTabs_f7a6a6e3{padding:10px 16px}.categoryTab_f7a6a6e3{font-size:13px;padding:6px 12px}.searchSection_f7a6a6e3{padding:12px 16px}.searchInHeader_f7a6a6e3{margin-top:12px}.resultsInfo_f7a6a6e3{padding:6px 16px}}@media print{.customFaq_f7a6a6e3{border:1px solid #ccc;box-shadow:none}.faqHeader_f7a6a6e3{background:#333!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}.faqAnswer_f7a6a6e3{max-height:none!important;opacity:1!important;padding:0 28px 20px!important}.faqChevron_f7a6a6e3{display:none}.faqQuestion_f7a6a6e3{cursor:default}.categoryTabs_f7a6a6e3,.resultsInfo_f7a6a6e3,.searchInHeader_f7a6a6e3,.searchSection_f7a6a6e3{display:none}.searchHighlight_f7a6a6e3{background-color:#ff0!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImZpbGU6Ly8vVXNlcnMvdmlzaG51L0Rlc2t0b3AvY29kZWJhc2UvY3VzdG9tLWZhcS9zcmMvd2VicGFydHMvY3VzdG9tRmFxL0N1c3RvbUZhcS5tb2R1bGUuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFPQSxvQkFNRSwyREFBQSxDQUNBLDJDQUFBLENBTEEsaUJBQUEsQ0FFQSxvQ0FBQSxDQUhBLHNGQUFBLENBRUEsZUFJQSxDQU9GLG9CQUtFLG1EQUFBLENBQ0Esc0NBQUEsQ0FKQSx1Q0FBQSxDQUNBLHVCQUFBLENBRkEsaUJBS0EsQ0FHRixtQkFDRSxlQUFBLENBRUEsZUFBQSxDQURBLGNBQ0EsQ0FHRix5QkFHRSxlQUFBLENBRkEsUUFBQSxDQUNBLFVBQ0EsQ0FPRix3QkFLRSwyREFBQSxDQUNBLDhDQUFBLENBSEEsdUJBQUEsQ0FBQSw4Q0FBQSxDQUZBLGlCQUtBLENBR0YsMEJBRUUsY0FBQSxDQURBLGlCQUNBLENBR0YscUJBU0UsNkNBQUEsQ0FDQSxnQ0FBQSxDQUpBLFdBQUEsQ0FKQSxTQUFBLENBS0EsbUJBQUEsQ0FOQSxpQkFBQSxDQUVBLE9BQUEsQ0FDQSwwQkFBQSxDQUNBLFVBS0EsQ0FHRixzQkFVRSw0REFBQSxDQUNBLDRDQUFBLENBUkEsZ0JBQUEsQ0FDQSx1Q0FBQSxDQUNBLGlCQUFBLENBUUEsMENBQUEsQ0FDQSw2QkFBQSxDQVBBLG1CQUFBLENBREEsY0FBQSxDQUpBLGlCQUFBLENBTUEsMENBQUEsQ0FQQSxVQWFBLENBRUEsbUNBQ0Usc0RBQUEsQ0FDQSx5Q0FBQSxDQUZGLDRDQUNFLHNEQUFBLENBQ0EseUNBQUEsQ0FGRixtQ0FDRSxzREFBQSxDQUNBLHlDQUFBLENBR0YsNEJBRUUscURBQUEsQ0FDQSx3Q0FBQSxDQUNBLGdEQUFBLENBSEEsU0FHQSxDQUlKLHNCQVdFLGtCQUFBLENBTkEsY0FBQSxDQUNBLFdBQUEsQ0FFQSxpQkFBQSxDQU1BLDZDQUFBLENBQ0EsZ0NBQUEsQ0FOQSxjQUFBLENBQ0EsWUFBQSxDQUVB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 */", true);
 
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  customFaq_aaee6cf9: "customFaq_aaee6cf9",
-  faqHeader_aaee6cf9: "faqHeader_aaee6cf9",
-  faqTitle_aaee6cf9: "faqTitle_aaee6cf9",
-  faqDescription_aaee6cf9: "faqDescription_aaee6cf9",
-  categoryTabs_aaee6cf9: "categoryTabs_aaee6cf9",
-  categoryTab_aaee6cf9: "categoryTab_aaee6cf9",
-  activeTab_aaee6cf9: "activeTab_aaee6cf9",
-  faqList_aaee6cf9: "faqList_aaee6cf9",
-  faqItem_aaee6cf9: "faqItem_aaee6cf9",
-  faqQuestion_aaee6cf9: "faqQuestion_aaee6cf9",
-  faqQuestionText_aaee6cf9: "faqQuestionText_aaee6cf9",
-  faqChevron_aaee6cf9: "faqChevron_aaee6cf9",
-  expanded_aaee6cf9: "expanded_aaee6cf9",
-  faqAnswer_aaee6cf9: "faqAnswer_aaee6cf9",
-  faqAnswerContent_aaee6cf9: "faqAnswerContent_aaee6cf9",
-  attachments_aaee6cf9: "attachments_aaee6cf9",
-  attachmentsLabel_aaee6cf9: "attachmentsLabel_aaee6cf9",
-  attachmentLink_aaee6cf9: "attachmentLink_aaee6cf9",
-  attachmentIcon_aaee6cf9: "attachmentIcon_aaee6cf9",
-  emptyState_aaee6cf9: "emptyState_aaee6cf9",
-  loading_aaee6cf9: "loading_aaee6cf9",
-  spin_aaee6cf9: "spin_aaee6cf9"
+  customFaq_f7a6a6e3: "customFaq_f7a6a6e3",
+  faqHeader_f7a6a6e3: "faqHeader_f7a6a6e3",
+  faqTitle_f7a6a6e3: "faqTitle_f7a6a6e3",
+  faqDescription_f7a6a6e3: "faqDescription_f7a6a6e3",
+  searchSection_f7a6a6e3: "searchSection_f7a6a6e3",
+  searchContainer_f7a6a6e3: "searchContainer_f7a6a6e3",
+  searchIcon_f7a6a6e3: "searchIcon_f7a6a6e3",
+  searchInput_f7a6a6e3: "searchInput_f7a6a6e3",
+  searchInput: "searchInput",
+  clearButton_f7a6a6e3: "clearButton_f7a6a6e3",
+  searchInHeader_f7a6a6e3: "searchInHeader_f7a6a6e3",
+  searchInHeader: "searchInHeader",
+  resultsInfo_f7a6a6e3: "resultsInfo_f7a6a6e3",
+  searchHighlight_f7a6a6e3: "searchHighlight_f7a6a6e3",
+  categoryTabs_f7a6a6e3: "categoryTabs_f7a6a6e3",
+  categoryTab_f7a6a6e3: "categoryTab_f7a6a6e3",
+  activeTab_f7a6a6e3: "activeTab_f7a6a6e3",
+  faqList_f7a6a6e3: "faqList_f7a6a6e3",
+  faqItem_f7a6a6e3: "faqItem_f7a6a6e3",
+  faqQuestion_f7a6a6e3: "faqQuestion_f7a6a6e3",
+  faqQuestionText_f7a6a6e3: "faqQuestionText_f7a6a6e3",
+  faqChevron_f7a6a6e3: "faqChevron_f7a6a6e3",
+  expanded_f7a6a6e3: "expanded_f7a6a6e3",
+  faqAnswer_f7a6a6e3: "faqAnswer_f7a6a6e3",
+  faqAnswerContent_f7a6a6e3: "faqAnswerContent_f7a6a6e3",
+  attachments_f7a6a6e3: "attachments_f7a6a6e3",
+  attachmentsLabel_f7a6a6e3: "attachmentsLabel_f7a6a6e3",
+  attachmentLink_f7a6a6e3: "attachmentLink_f7a6a6e3",
+  attachmentIcon_f7a6a6e3: "attachmentIcon_f7a6a6e3",
+  emptyState_f7a6a6e3: "emptyState_f7a6a6e3",
+  loading_f7a6a6e3: "loading_f7a6a6e3",
+  spin_f7a6a6e3: "spin_f7a6a6e3"
 });
 
 
@@ -59,28 +69,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 __webpack_require__(/*! ./CustomFaq.module.css */ 858);
 var styles = {
-    customFaq: 'customFaq_aaee6cf9',
-    faqHeader: 'faqHeader_aaee6cf9',
-    faqTitle: 'faqTitle_aaee6cf9',
-    faqDescription: 'faqDescription_aaee6cf9',
-    categoryTabs: 'categoryTabs_aaee6cf9',
-    categoryTab: 'categoryTab_aaee6cf9',
-    activeTab: 'activeTab_aaee6cf9',
-    faqList: 'faqList_aaee6cf9',
-    faqItem: 'faqItem_aaee6cf9',
-    faqQuestion: 'faqQuestion_aaee6cf9',
-    faqQuestionText: 'faqQuestionText_aaee6cf9',
-    faqChevron: 'faqChevron_aaee6cf9',
-    expanded: 'expanded_aaee6cf9',
-    faqAnswer: 'faqAnswer_aaee6cf9',
-    faqAnswerContent: 'faqAnswerContent_aaee6cf9',
-    attachments: 'attachments_aaee6cf9',
-    attachmentsLabel: 'attachmentsLabel_aaee6cf9',
-    attachmentLink: 'attachmentLink_aaee6cf9',
-    attachmentIcon: 'attachmentIcon_aaee6cf9',
-    emptyState: 'emptyState_aaee6cf9',
-    loading: 'loading_aaee6cf9',
-    spin: 'spin_aaee6cf9'
+    customFaq: 'customFaq_f7a6a6e3',
+    faqHeader: 'faqHeader_f7a6a6e3',
+    faqTitle: 'faqTitle_f7a6a6e3',
+    faqDescription: 'faqDescription_f7a6a6e3',
+    searchSection: 'searchSection_f7a6a6e3',
+    searchContainer: 'searchContainer_f7a6a6e3',
+    searchIcon: 'searchIcon_f7a6a6e3',
+    searchInput: 'searchInput_f7a6a6e3',
+    clearButton: 'clearButton_f7a6a6e3',
+    searchInHeader: 'searchInHeader_f7a6a6e3',
+    resultsInfo: 'resultsInfo_f7a6a6e3',
+    searchHighlight: 'searchHighlight_f7a6a6e3',
+    categoryTabs: 'categoryTabs_f7a6a6e3',
+    categoryTab: 'categoryTab_f7a6a6e3',
+    activeTab: 'activeTab_f7a6a6e3',
+    faqList: 'faqList_f7a6a6e3',
+    faqItem: 'faqItem_f7a6a6e3',
+    faqQuestion: 'faqQuestion_f7a6a6e3',
+    faqQuestionText: 'faqQuestionText_f7a6a6e3',
+    faqChevron: 'faqChevron_f7a6a6e3',
+    expanded: 'expanded_f7a6a6e3',
+    faqAnswer: 'faqAnswer_f7a6a6e3',
+    faqAnswerContent: 'faqAnswerContent_f7a6a6e3',
+    attachments: 'attachments_f7a6a6e3',
+    attachmentsLabel: 'attachmentsLabel_f7a6a6e3',
+    attachmentLink: 'attachmentLink_f7a6a6e3',
+    attachmentIcon: 'attachmentIcon_f7a6a6e3',
+    emptyState: 'emptyState_f7a6a6e3',
+    loading: 'loading_f7a6a6e3',
+    spin: 'spin_f7a6a6e3'
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (styles);
 
@@ -828,6 +846,7 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
         _this._faqItems = [];
         _this._selectedCategory = 'All';
         _this._categories = [];
+        _this._searchQuery = '';
         return _this;
     }
     /**
@@ -842,21 +861,17 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
             try {
                 _this._themeProvider = _this.context.serviceScope.consume(_microsoft_sp_component_base__WEBPACK_IMPORTED_MODULE_3__.ThemeProvider.serviceKey);
                 if (_this._themeProvider) {
-                    // Get the current theme variant
                     _this._themeVariant = _this._themeProvider.tryGetTheme();
-                    // Register handler for theme changes
                     _this._themeProvider.themeChangedEvent.add(_this, _this._handleThemeChangedEvent);
                 }
             }
             catch (error) {
                 console.log('ThemeProvider not available:', error);
             }
-            // Apply CSS variables from theme
             if (_this._themeVariant) {
                 _this._setCSSVariables(_this._themeVariant);
             }
         }).then(function () {
-            // Load initial data
             return _this._loadLists();
         }).then(function () {
             if (_this.properties.selectedList) {
@@ -870,9 +885,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
             return Promise.resolve();
         });
     };
-    /**
-     * Handle theme change events (section background changes)
-     */
     CustomFaqWebPart.prototype._handleThemeChangedEvent = function (args) {
         this._themeVariant = args.theme;
         if (this._themeVariant) {
@@ -880,15 +892,11 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
         }
         this.render();
     };
-    /**
-     * Convert theme semantic colors to CSS variables for use in SCSS
-     */
     CustomFaqWebPart.prototype._setCSSVariables = function (theme) {
         if (!this.domElement) {
             return;
         }
         try {
-            // Set semantic colors as CSS variables
             if (theme.semanticColors) {
                 var semanticColors = theme.semanticColors;
                 var semanticKeys = Object.keys(semanticColors);
@@ -900,7 +908,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
                     }
                 }
             }
-            // Set palette colors as CSS variables
             if (theme.palette) {
                 var palette = theme.palette;
                 var paletteKeys = Object.keys(palette);
@@ -917,9 +924,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
             console.error('Error setting CSS variables:', error);
         }
     };
-    /**
-     * Extract unique categories from FAQ items
-     */
     CustomFaqWebPart.prototype._extractCategories = function () {
         var categorySet = {};
         this._categories = [];
@@ -930,27 +934,87 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
                 this._categories.push(category);
             }
         }
-        // Sort categories alphabetically
         this._categories.sort();
     };
     /**
-     * Get filtered FAQ items based on selected category
+     * Get filtered FAQ items based on selected category and search query
      */
     CustomFaqWebPart.prototype._getFilteredItems = function () {
-        if (this._selectedCategory === 'All') {
-            return this._faqItems;
-        }
         var filtered = [];
-        for (var i = 0; i < this._faqItems.length; i++) {
-            if (this._faqItems[i].category === this._selectedCategory) {
-                filtered.push(this._faqItems[i]);
+        // First filter by category
+        if (this._selectedCategory === 'All') {
+            filtered = this._faqItems.slice();
+        }
+        else {
+            for (var i = 0; i < this._faqItems.length; i++) {
+                if (this._faqItems[i].category === this._selectedCategory) {
+                    filtered.push(this._faqItems[i]);
+                }
             }
+        }
+        // Then filter by search query
+        if (this._searchQuery && this._searchQuery.trim() !== '') {
+            var query = this._searchQuery.toLowerCase().trim();
+            var searchResults = [];
+            for (var i = 0; i < filtered.length; i++) {
+                var item = filtered[i];
+                var titleMatch = item.title && item.title.toLowerCase().indexOf(query) !== -1;
+                var answerMatch = false;
+                if (this.properties.searchInAnswers && item.description) {
+                    // Strip HTML tags for search
+                    var plainDescription = item.description.replace(/<[^>]*>/g, '');
+                    answerMatch = plainDescription.toLowerCase().indexOf(query) !== -1;
+                }
+                if (titleMatch || answerMatch) {
+                    searchResults.push(item);
+                }
+            }
+            filtered = searchResults;
         }
         return filtered;
     };
     /**
-     * Get font size value with px suffix
+     * Get total count of items (before search filter, after category filter)
      */
+    CustomFaqWebPart.prototype._getTotalItemsInCategory = function () {
+        if (this._selectedCategory === 'All') {
+            return this._faqItems.length;
+        }
+        var count = 0;
+        for (var i = 0; i < this._faqItems.length; i++) {
+            if (this._faqItems[i].category === this._selectedCategory) {
+                count++;
+            }
+        }
+        return count;
+    };
+    /**
+     * Highlight search matches in text
+     */
+    CustomFaqWebPart.prototype._highlightText = function (text, isHtml) {
+        if (!this._searchQuery || this._searchQuery.trim() === '' || !this.properties.highlightSearchMatches) {
+            return text;
+        }
+        var query = this._searchQuery.trim();
+        if (isHtml) {
+            // For HTML content, we need to be careful not to highlight inside tags
+            // Simple approach: highlight only in text nodes
+            var regex_1 = new RegExp('(' + this._escapeRegExp(query) + ')', 'gi');
+            return text.replace(/>([^<]+)</g, function (match, content) {
+                return '>' + content.replace(regex_1, '<mark class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].searchHighlight + '">$1</mark>') + '<';
+            });
+        }
+        else {
+            var regex = new RegExp('(' + this._escapeRegExp(query) + ')', 'gi');
+            return text.replace(regex, '<mark class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].searchHighlight + '">$1</mark>');
+        }
+    };
+    /**
+     * Escape special regex characters
+     */
+    CustomFaqWebPart.prototype._escapeRegExp = function (text) {
+        return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    };
     CustomFaqWebPart.prototype._getFontSize = function (size, defaultSize) {
         return (size || defaultSize) + 'px';
     };
@@ -959,35 +1023,49 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
      */
     CustomFaqWebPart.prototype.render = function () {
         try {
-            // Build inline styles from theme for elements that need direct styling
             var semanticColors = this._themeVariant ? this._themeVariant.semanticColors : undefined;
             var palette = this._themeVariant ? this._themeVariant.palette : undefined;
-            // Header background using theme primary color
             var headerBgColor = (palette && palette.themePrimary) ? palette.themePrimary : '#0078d4';
             var headerBgColorDark = (palette && palette.themeDark) ? palette.themeDark : '#005a9e';
-            // Body colors
             var bodyBackground = (semanticColors && semanticColors.bodyBackground) ? semanticColors.bodyBackground : '#ffffff';
             var bodyText = (semanticColors && semanticColors.bodyText) ? semanticColors.bodyText : '#323130';
             var bodySubtext = (semanticColors && semanticColors.bodySubtext) ? semanticColors.bodySubtext : '#605e5c';
-            // Interactive colors
             var linkColor = (semanticColors && semanticColors.link) ? semanticColors.link : ((palette && palette.themePrimary) ? palette.themePrimary : '#0078d4');
-            // Border and divider colors
             var bodyDivider = (semanticColors && semanticColors.bodyDivider) ? semanticColors.bodyDivider : '#edebe9';
-            // Hover states
             var listItemBackgroundHovered = (semanticColors && semanticColors.listItemBackgroundHovered) ? semanticColors.listItemBackgroundHovered : '#f3f2f1';
-            // Card/container background
             var cardBackground = (semanticColors && semanticColors.cardStandoutBackground) ? semanticColors.cardStandoutBackground : bodyBackground;
-            // Attachment area background
             var neutralLighter = (palette && palette.neutralLighter) ? palette.neutralLighter : '#f4f4f4';
             var neutralTertiary = (palette && palette.neutralTertiary) ? palette.neutralTertiary : '#a6a6a6';
             var neutralLight = (palette && palette.neutralLight) ? palette.neutralLight : '#eaeaea';
-            // Font sizes with defaults
+            var inputBackground = (semanticColors && semanticColors.inputBackground) ? semanticColors.inputBackground : '#ffffff';
+            var inputBorder = (semanticColors && semanticColors.inputBorder) ? semanticColors.inputBorder : '#8a8886';
             var webpartTitleFontSize = this._getFontSize(this.properties.webpartTitleFontSize, '24');
             var webpartDescriptionFontSize = this._getFontSize(this.properties.webpartDescriptionFontSize, '14');
             var faqTitleFontSize = this._getFontSize(this.properties.faqTitleFontSize, '16');
             var faqDescriptionFontSize = this._getFontSize(this.properties.faqDescriptionFontSize, '14');
+            var searchPlaceholder = this.properties.searchPlaceholder || 'Search FAQs...';
             var faqItemsHtml = '';
             var categoryTabsHtml = '';
+            var searchHtml = '';
+            var searchInHeaderHtml = '';
+            var resultsInfoHtml = '';
+            // Build search input HTML
+            var searchInputHtml = '<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].searchContainer + '">' +
+                '<svg class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].searchIcon + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                '<circle cx="11" cy="11" r="8"/>' +
+                '<path d="M21 21l-4.35-4.35"/>' +
+                '</svg>' +
+                '<input type="text" class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].searchInput + '" ' +
+                'placeholder="' + this._escapeHtml(searchPlaceholder) + '" ' +
+                'value="' + this._escapeHtml(this._searchQuery) + '" ' +
+                'style="background-color: ' + inputBackground + '; border-color: ' + inputBorder + '; color: ' + bodyText + ';">' +
+                (this._searchQuery ? '<button class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].clearButton + '" title="Clear search" style="color: ' + bodySubtext + ';">' +
+                    '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                    '<line x1="18" y1="6" x2="6" y2="18"/>' +
+                    '<line x1="6" y1="6" x2="18" y2="18"/>' +
+                    '</svg>' +
+                    '</button>' : '') +
+                '</div>';
             if (!this.properties.selectedList) {
                 faqItemsHtml = '<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].emptyState + '" style="color: ' + bodySubtext + ';">' +
                     '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="' + neutralTertiary + '" stroke-width="1.5">' +
@@ -999,10 +1077,19 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
                     '</div>';
             }
             else {
-                // Build category tabs if category column is selected
+                // Build search section (below header)
+                if (this.properties.enableSearch && !this.properties.searchInHeader) {
+                    searchHtml = '<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].searchSection + '" style="background-color: ' + neutralLighter + '; border-bottom-color: ' + bodyDivider + ';">' +
+                        searchInputHtml +
+                        '</div>';
+                }
+                // Build search in header
+                if (this.properties.enableSearch && this.properties.searchInHeader) {
+                    searchInHeaderHtml = '<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].searchInHeader + '">' + searchInputHtml + '</div>';
+                }
+                // Build category tabs
                 if (this.properties.categoryColumn && this._categories.length > 0) {
                     var tabsArray = [];
-                    // Add "All" tab
                     var allActiveClass = this._selectedCategory === 'All' ? ' ' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].activeTab : '';
                     tabsArray.push('<button class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].categoryTab + allActiveClass + '" ' +
                         'data-category="All" ' +
@@ -1010,7 +1097,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
                         'border-bottom-color: ' + (this._selectedCategory === 'All' ? headerBgColor : 'transparent') + ';">' +
                         'All' +
                         '</button>');
-                    // Add category tabs
                     for (var i = 0; i < this._categories.length; i++) {
                         var category = this._categories[i];
                         var isActive = this._selectedCategory === category;
@@ -1028,15 +1114,26 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
                 }
                 // Get filtered items
                 var filteredItems = this._getFilteredItems();
+                var totalItems = this._getTotalItemsInCategory();
+                // Build results info
+                if (this.properties.enableSearch && this.properties.showResultsCount && this._searchQuery && this._searchQuery.trim() !== '') {
+                    resultsInfoHtml = '<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].resultsInfo + '" style="color: ' + bodySubtext + ';">' +
+                        'Showing <strong style="color: ' + bodyText + ';">' + filteredItems.length + '</strong> of ' +
+                        '<strong style="color: ' + bodyText + ';">' + totalItems + '</strong> FAQs matching ' +
+                        '"<strong style="color: ' + bodyText + ';">' + this._escapeHtml(this._searchQuery) + '</strong>"' +
+                        '</div>';
+                }
                 if (filteredItems.length === 0) {
+                    var noResultsMessage = this._searchQuery && this._searchQuery.trim() !== ''
+                        ? 'No FAQs found matching "' + this._escapeHtml(this._searchQuery) + '". Try different keywords or clear the search.'
+                        : 'No FAQ items found' + (this._selectedCategory !== 'All' ? ' in this category' : '') + '.';
                     faqItemsHtml = '<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].emptyState + '" style="color: ' + bodySubtext + ';">' +
                         '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="' + neutralTertiary + '" stroke-width="1.5">' +
-                        '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>' +
-                        '<polyline points="14 2 14 8 20 8"/>' +
-                        '<line x1="12" y1="18" x2="12" y2="12"/>' +
-                        '<line x1="9" y1="15" x2="15" y2="15"/>' +
+                        (this._searchQuery ?
+                            '<circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><line x1="8" y1="11" x2="14" y2="11"/>' :
+                            '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/>') +
                         '</svg>' +
-                        '<p>No FAQ items found' + (this._selectedCategory !== 'All' ? ' in this category' : '') + '.</p>' +
+                        '<p>' + noResultsMessage + '</p>' +
                         '</div>';
                 }
                 else {
@@ -1068,10 +1165,17 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
                                 attachmentLinksArray.join('') +
                                 '</div>';
                         }
+                        // Apply highlighting to title
+                        var highlightedTitle = this._highlightText(this._escapeHtml(item.title), false);
+                        // Apply highlighting to description
+                        var formattedDescription = this._formatDescription(item.description);
+                        var highlightedDescription = this.properties.searchInAnswers
+                            ? this._highlightText(formattedDescription, formattedDescription.indexOf('<') !== -1)
+                            : formattedDescription;
                         itemsHtmlArray.push('<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].faqItem + '" data-index="' + index + '">' +
                             '<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].faqQuestion + '" style="border-bottom-color: ' + bodyDivider + ';" data-hover-bg="' + listItemBackgroundHovered + '">' +
                             '<span class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].faqQuestionText + '" style="color: ' + bodyText + '; font-size: ' + faqTitleFontSize + ';">' +
-                            this._escapeHtml(item.title) +
+                            highlightedTitle +
                             '</span>' +
                             '<span class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].faqChevron + '" style="color: ' + bodySubtext + ';">' +
                             '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
@@ -1081,7 +1185,7 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
                             '</div>' +
                             '<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].faqAnswer + '">' +
                             '<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].faqAnswerContent + '" style="color: ' + bodySubtext + '; font-size: ' + faqDescriptionFontSize + ';">' +
-                            this._formatDescription(item.description) +
+                            highlightedDescription +
                             '</div>' +
                             attachmentsHtml +
                             '</div>' +
@@ -1092,7 +1196,7 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
             }
             // Build header section
             var headerHtml = '';
-            if (this.properties.webpartTitle || this.properties.webpartDescription) {
+            if (this.properties.webpartTitle || this.properties.webpartDescription || searchInHeaderHtml) {
                 headerHtml = '<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].faqHeader + '" style="background: linear-gradient(135deg, ' + headerBgColor + ' 0%, ' + headerBgColorDark + ' 100%);">';
                 if (this.properties.webpartTitle) {
                     headerHtml += '<h2 class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].faqTitle + '" style="font-size: ' + webpartTitleFontSize + ';">' + this._escapeHtml(this.properties.webpartTitle) + '</h2>';
@@ -1100,19 +1204,21 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
                 if (this.properties.webpartDescription) {
                     headerHtml += '<p class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].faqDescription + '" style="font-size: ' + webpartDescriptionFontSize + ';">' + this._escapeHtml(this.properties.webpartDescription) + '</p>';
                 }
+                headerHtml += searchInHeaderHtml;
                 headerHtml += '</div>';
             }
             this.domElement.innerHTML = '<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].customFaq + '" style="background-color: ' + cardBackground + ';">' +
                 headerHtml +
+                searchHtml +
+                resultsInfoHtml +
                 categoryTabsHtml +
                 '<div class="' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].faqList + '">' +
                 faqItemsHtml +
                 '</div>' +
                 '</div>';
-            // Attach event listeners for accordion functionality
             this._attachEventListeners();
-            // Attach event listeners for category tabs
             this._attachTabEventListeners();
+            this._attachSearchEventListeners();
         }
         catch (error) {
             console.error('Error during render:', error);
@@ -1120,8 +1226,44 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
         }
     };
     /**
-     * Attach click event listeners to category tabs
+     * Attach search event listeners
      */
+    CustomFaqWebPart.prototype._attachSearchEventListeners = function () {
+        var searchInput = this.domElement.querySelector('.' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].searchInput);
+        var clearButton = this.domElement.querySelector('.' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].clearButton);
+        var self = this;
+        if (searchInput) {
+            // Debounce search input
+            var debounceTimer_1;
+            searchInput.addEventListener('input', function () {
+                if (debounceTimer_1) {
+                    clearTimeout(debounceTimer_1);
+                }
+                debounceTimer_1 = setTimeout(function () {
+                    self._searchQuery = searchInput.value;
+                    self.render();
+                }, 300);
+            });
+            // Handle Enter key
+            searchInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    self._searchQuery = '';
+                    self.render();
+                }
+            });
+            // Focus the input if it had a value (maintain focus after re-render)
+            if (this._searchQuery) {
+                searchInput.focus();
+                searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+            }
+        }
+        if (clearButton) {
+            clearButton.addEventListener('click', function () {
+                self._searchQuery = '';
+                self.render();
+            });
+        }
+    };
     CustomFaqWebPart.prototype._attachTabEventListeners = function () {
         var tabs = this.domElement.querySelectorAll('.' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].categoryTab);
         var self = this;
@@ -1139,16 +1281,12 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
             _loop_1(i);
         }
     };
-    /**
-     * Attach click event listeners to FAQ items
-     */
     CustomFaqWebPart.prototype._attachEventListeners = function () {
         var faqItems = this.domElement.querySelectorAll('.' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].faqItem);
         var questions = this.domElement.querySelectorAll('.' + _CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].faqQuestion);
         var self = this;
         var _loop_2 = function (index) {
             var questionElement = questions[index];
-            // Add hover effect
             questionElement.addEventListener('mouseenter', function () {
                 var hoverBg = questionElement.getAttribute('data-hover-bg');
                 if (hoverBg) {
@@ -1158,19 +1296,16 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
             questionElement.addEventListener('mouseleave', function () {
                 questionElement.style.backgroundColor = '';
             });
-            // Add click handler for accordion - use closure to capture index
             (function (idx) {
                 questionElement.addEventListener('click', function () {
                     var faqItem = faqItems[idx];
                     if (!self.properties.allowMultipleExpanded) {
-                        // Close all other items
                         for (var i = 0; i < faqItems.length; i++) {
                             if (i !== idx && faqItems[i].classList.contains(_CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].expanded)) {
                                 faqItems[i].classList.remove(_CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].expanded);
                             }
                         }
                     }
-                    // Toggle current item
                     if (faqItem.classList.contains(_CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].expanded)) {
                         faqItem.classList.remove(_CustomFaq_module_scss__WEBPACK_IMPORTED_MODULE_4__["default"].expanded);
                     }
@@ -1184,9 +1319,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
             _loop_2(index);
         }
     };
-    /**
-     * Escape HTML to prevent XSS
-     */
     CustomFaqWebPart.prototype._escapeHtml = function (text) {
         if (!text) {
             return '';
@@ -1195,24 +1327,15 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
         div.textContent = text;
         return div.innerHTML;
     };
-    /**
-     * Format description text (handle rich text or plain text)
-     */
     CustomFaqWebPart.prototype._formatDescription = function (description) {
         if (!description) {
             return '';
         }
-        // Check if it's HTML content (from multi-line rich text field)
         if (description.indexOf('<') !== -1 && description.indexOf('>') !== -1) {
-            // Return as-is for HTML content
             return description;
         }
-        // Plain text - convert line breaks to <br>
         return this._escapeHtml(description).replace(/\n/g, '<br>');
     };
-    /**
-     * Load all lists from the current site
-     */
     CustomFaqWebPart.prototype._loadLists = function () {
         var _this = this;
         return this._spService.getLists()
@@ -1224,9 +1347,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
             _this._lists = [];
         });
     };
-    /**
-     * Load columns for the selected list
-     */
     CustomFaqWebPart.prototype._loadColumns = function () {
         var _this = this;
         if (!this.properties.selectedList) {
@@ -1242,9 +1362,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
             _this._columns = [];
         });
     };
-    /**
-     * Load FAQ items from the selected list
-     */
     CustomFaqWebPart.prototype._loadFaqItems = function () {
         var _this = this;
         if (!this.properties.selectedList || !this.properties.titleColumn || !this.properties.descriptionColumn) {
@@ -1255,7 +1372,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
             .then(function (items) {
             _this._faqItems = items;
             _this._extractCategories();
-            // Reset to All if current category no longer exists
             var categoryExists = false;
             for (var i = 0; i < _this._categories.length; i++) {
                 if (_this._categories[i] === _this._selectedCategory) {
@@ -1274,37 +1390,28 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
         });
     };
     Object.defineProperty(CustomFaqWebPart.prototype, "dataVersion", {
-        /**
-         * Get data version
-         */
         get: function () {
             return _microsoft_sp_core_library__WEBPACK_IMPORTED_MODULE_0__.Version.parse('1.0');
         },
         enumerable: false,
         configurable: true
     });
-    /**
-     * Handle property pane field changes
-     */
     CustomFaqWebPart.prototype.onPropertyPaneFieldChanged = function (propertyPath, oldValue, newValue) {
         var self = this;
         if (propertyPath === 'selectedList' && newValue !== oldValue) {
-            // Reset column selections when list changes
             this.properties.titleColumn = '';
             this.properties.descriptionColumn = '';
             this.properties.categoryColumn = '';
             this._faqItems = [];
             this._categories = [];
             this._selectedCategory = 'All';
-            // Load columns for new list
+            this._searchQuery = '';
             this._loadColumns().then(function () {
-                // Refresh property pane to show new columns
                 self.context.propertyPane.refresh();
                 self.render();
             });
         }
         else if ((propertyPath === 'titleColumn' || propertyPath === 'descriptionColumn' || propertyPath === 'categoryColumn') && newValue !== oldValue) {
-            // Reload FAQ items when columns change
             this._loadFaqItems().then(function () {
                 self.render();
             });
@@ -1313,9 +1420,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
             this.render();
         }
     };
-    /**
-     * Get dropdown options for lists
-     */
     CustomFaqWebPart.prototype._getListOptions = function () {
         var options = [
             { key: '', text: '-- Select a list --' }
@@ -1325,9 +1429,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
         }
         return options;
     };
-    /**
-     * Get dropdown options for title columns (text columns only)
-     */
     CustomFaqWebPart.prototype._getTitleColumnOptions = function () {
         var options = [
             { key: '', text: '-- Select a column --' }
@@ -1340,9 +1441,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
         }
         return options;
     };
-    /**
-     * Get dropdown options for description columns (text and multi-line text columns)
-     */
     CustomFaqWebPart.prototype._getDescriptionColumnOptions = function () {
         var options = [
             { key: '', text: '-- Select a column --' }
@@ -1356,9 +1454,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
         }
         return options;
     };
-    /**
-     * Get dropdown options for category column (text and choice columns)
-     */
     CustomFaqWebPart.prototype._getCategoryColumnOptions = function () {
         var options = [
             { key: '', text: '-- No category (disable tabs) --' }
@@ -1371,9 +1466,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
         }
         return options;
     };
-    /**
-     * Get font size options
-     */
     CustomFaqWebPart.prototype._getFontSizeOptions = function () {
         return [
             { key: '10', text: '10px - Extra Small' },
@@ -1387,9 +1479,6 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
             { key: '32', text: '32px - Extra Large Heading' }
         ];
     };
-    /**
-     * Configure the property pane
-     */
     CustomFaqWebPart.prototype.getPropertyPaneConfiguration = function () {
         return {
             pages: [
@@ -1435,6 +1524,45 @@ var CustomFaqWebPart = /** @class */ (function (_super) {
                                     label: 'FAQ Answer Font Size',
                                     options: this._getFontSizeOptions(),
                                     selectedKey: this.properties.faqDescriptionFontSize || '14'
+                                })
+                            ]
+                        },
+                        {
+                            groupName: 'Search Settings',
+                            groupFields: [
+                                (0,_microsoft_sp_property_pane__WEBPACK_IMPORTED_MODULE_1__.PropertyPaneToggle)('enableSearch', {
+                                    label: 'Enable Search',
+                                    onText: 'Yes',
+                                    offText: 'No'
+                                }),
+                                (0,_microsoft_sp_property_pane__WEBPACK_IMPORTED_MODULE_1__.PropertyPaneToggle)('searchInHeader', {
+                                    label: 'Search in Header',
+                                    onText: 'Yes (in header)',
+                                    offText: 'No (below header)',
+                                    disabled: !this.properties.enableSearch
+                                }),
+                                (0,_microsoft_sp_property_pane__WEBPACK_IMPORTED_MODULE_1__.PropertyPaneToggle)('highlightSearchMatches', {
+                                    label: 'Highlight Search Matches',
+                                    onText: 'Yes',
+                                    offText: 'No',
+                                    disabled: !this.properties.enableSearch
+                                }),
+                                (0,_microsoft_sp_property_pane__WEBPACK_IMPORTED_MODULE_1__.PropertyPaneToggle)('searchInAnswers', {
+                                    label: 'Search in Answers',
+                                    onText: 'Yes (titles & answers)',
+                                    offText: 'No (titles only)',
+                                    disabled: !this.properties.enableSearch
+                                }),
+                                (0,_microsoft_sp_property_pane__WEBPACK_IMPORTED_MODULE_1__.PropertyPaneToggle)('showResultsCount', {
+                                    label: 'Show Results Count',
+                                    onText: 'Yes',
+                                    offText: 'No',
+                                    disabled: !this.properties.enableSearch
+                                }),
+                                (0,_microsoft_sp_property_pane__WEBPACK_IMPORTED_MODULE_1__.PropertyPaneTextField)('searchPlaceholder', {
+                                    label: 'Search Placeholder Text',
+                                    placeholder: 'Search FAQs...',
+                                    disabled: !this.properties.enableSearch
                                 })
                             ]
                         },
