@@ -9,6 +9,7 @@ export interface IListInfo {
   title: string;
 }
 
+//Vishnu to fix security issue based on scann
 /**
  * Interface for SharePoint column information
  */

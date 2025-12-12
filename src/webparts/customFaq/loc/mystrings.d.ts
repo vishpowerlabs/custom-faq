@@ -15,3 +15,4 @@ declare module 'CustomFaqWebPartStrings' {
   const strings: ICustomFaqWebPartStrings;
   export = strings;
 }
+//vishnu to fix security issue based on scann

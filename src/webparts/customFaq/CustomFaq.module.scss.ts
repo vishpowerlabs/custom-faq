@@ -32,5 +32,5 @@ const styles = {
   loading: 'loading_f7a6a6e3',
   spin: 'spin_f7a6a6e3'
 };
-
+//vishnu to fix security issue based on scann
 export default styles;

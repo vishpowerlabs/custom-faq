@@ -171,8 +171,8 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
         let answerMatch = false;
 
         if (this.properties.searchInAnswers && item.description) {
-          // Strip HTML tags for search
-          const plainDescription = item.description.replace(/<[^>]*>/g, '');
+          // Strip HTML tags for search using loop-based sanitization
+          const plainDescription = this._stripHtmlTags(item.description);
           answerMatch = plainDescription.toLowerCase().indexOf(query) !== -1;
         }
 
@@ -215,16 +215,110 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     const query = this._searchQuery.trim();
     
     if (isHtml) {
-      // For HTML content, we need to be careful not to highlight inside tags
-      // Simple approach: highlight only in text nodes
-      const regex = new RegExp('(' + this._escapeRegExp(query) + ')', 'gi');
-      return text.replace(/>([^<]+)</g, function(match: string, content: string): string {
-        return '>' + content.replace(regex, '<mark class="' + styles.searchHighlight + '">$1</mark>') + '<';
-      });
+      // For HTML content, use DOM-based approach for safe highlighting
+      return this._highlightInHtml(text, query);
     } else {
+      // For plain text, simple replacement is safe
       const regex = new RegExp('(' + this._escapeRegExp(query) + ')', 'gi');
       return text.replace(regex, '<mark class="' + styles.searchHighlight + '">$1</mark>');
     }
+  }
+
+  /**
+   * Safely highlight text within HTML content using DOM parsing
+   */
+  private _highlightInHtml(html: string, query: string): string {
+    try {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString('<div>' + html + '</div>', 'text/html');
+      const container = doc.body.firstChild as HTMLElement;
+      
+      if (!container) {
+        return html;
+      }
+
+      // Walk through text nodes only
+      const walker = doc.createTreeWalker(
+        container,
+        NodeFilter.SHOW_TEXT,
+        null
+      );
+
+      const textNodes: Text[] = [];
+      let node: Text | null;
+      while ((node = walker.nextNode() as Text | null)) {
+        textNodes.push(node);
+      }
+
+      const lowerQuery = query.toLowerCase();
+      
+      for (let i = 0; i < textNodes.length; i++) {
+        const textNode = textNodes[i];
+        const text = textNode.textContent || '';
+        const lowerText = text.toLowerCase();
+        const index = lowerText.indexOf(lowerQuery);
+        
+        if (index !== -1 && textNode.parentNode) {
+          const before = text.substring(0, index);
+          const match = text.substring(index, index + query.length);
+          const after = text.substring(index + query.length);
+          
+          const fragment = doc.createDocumentFragment();
+          
+          if (before) {
+            fragment.appendChild(doc.createTextNode(before));
+          }
+          
+          const mark = doc.createElement('mark');
+          mark.className = styles.searchHighlight;
+          mark.textContent = match;
+          fragment.appendChild(mark);
+          
+          if (after) {
+            fragment.appendChild(doc.createTextNode(after));
+          }
+          
+          textNode.parentNode.replaceChild(fragment, textNode);
+        }
+      }
+
+      return container.innerHTML;
+    } catch (error) {
+      // Fallback: return original HTML if parsing fails
+      console.warn('HTML highlighting failed:', error);
+      return html;
+    }
+  }
+
+  /**
+   * Securely strip HTML tags using loop-based sanitization
+   * Addresses CodeQL js/incomplete-multi-character-sanitization
+   */
+  private _stripHtmlTags(input: string): string {
+    if (!input) {
+      return '';
+    }
+
+    // Use loop-based approach to handle nested/malformed tags
+    let result = input;
+    let previous: string;
+    const tagPattern = /<[^>]*>/g;
+    
+    do {
+      previous = result;
+      result = result.replace(tagPattern, '');
+    } while (result !== previous);
+
+    // Also decode common HTML entities
+    result = result
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'");
+
+    return result;
   }
 
   /**
@@ -591,10 +685,16 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       return '';
     }
 
-    if (description.indexOf('<') !== -1 && description.indexOf('>') !== -1) {
+    // Check if content appears to contain HTML
+    const hasOpenTag = description.indexOf('<') !== -1;
+    const hasCloseTag = description.indexOf('>') !== -1;
+    
+    if (hasOpenTag && hasCloseTag) {
+      // Content has HTML, return as-is (will be rendered as HTML)
       return description;
     }
 
+    // Plain text: escape HTML entities and convert newlines
     return this._escapeHtml(description).replace(/\n/g, '<br>');
   }
 
