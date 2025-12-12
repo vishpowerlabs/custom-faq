@@ -55,7 +55,7 @@
 
 .searchContainer {
   position: relative;
-  max-width: 90%;
+  max-width: 100%;
 }
 
 .searchIcon {
@@ -224,6 +224,38 @@
   background-color: #fff3cd;
   padding: 1px 2px;
   border-radius: 2px;
+}
+
+/* ============================================
+   Top FAQ Badge
+   ============================================ */
+
+.topFaqBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: var(--topFaqBadgeColor, #ffffff);
+  background-color: var(--topFaqBadgeBackground, #ffb900);
+  border: 1px solid var(--topFaqBadgeBorder, #c78600);
+  box-shadow: 0 6px 12px var(--topFaqBadgeShadow, rgba(0, 0, 0, 0.25));
+}
+
+.topFaqTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+
+.topFaqBadgeLabel {
+  font-size: 13px;
+  letter-spacing: 0.2px;
 }
 
 /* High contrast mode */
@@ -700,7 +732,7 @@
   .faqQuestion {
     cursor: default;
   }
-  //vishnu to fix security issue based on scann
+  
   .categoryTabs {
     display: none;
   }

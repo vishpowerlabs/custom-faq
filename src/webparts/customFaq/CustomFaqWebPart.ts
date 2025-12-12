@@ -24,6 +24,8 @@ export interface ICustomFaqWebPartProps {
   titleColumn: string;
   descriptionColumn: string;
   categoryColumn: string;
+  topFaqColumn: string;
+  topFaqColor: string;
   allowMultipleExpanded: boolean;
   webpartTitleFontSize: string;
   webpartDescriptionFontSize: string;
@@ -37,6 +39,7 @@ export interface ICustomFaqWebPartProps {
   searchPlaceholder: string;
 }
 
+
 export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWebPartProps> {
 
   private _spService!: SharePointService;
@@ -48,6 +51,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
   private _selectedCategory: string = 'All';
   private _categories: string[] = [];
   private _searchQuery: string = '';
+  private readonly _topFaqCategoryKey: string = '__TOP_FAQ__';
 
   /**
    * Initialize the web part
@@ -149,6 +153,150 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     this._categories.sort();
   }
 
+  private _isTopFaqEnabled(): boolean {
+    return !!(this.properties.topFaqColumn && this.properties.topFaqColumn.trim() !== '');
+  }
+
+  private _hasTopFaqItems(): boolean {
+    let i = 0;
+    while (i < this._faqItems.length) {
+      if (this._faqItems[i].isTopFaq) {
+        return true;
+      }
+      i++;
+    }
+    return false;
+  }
+
+  private _ensureValidCategorySelection(): void {
+    const validCategories: { [key: string]: boolean } = {
+      'All': true
+    };
+
+    if (this._isTopFaqEnabled()) {
+      validCategories[this._topFaqCategoryKey] = true;
+    }
+
+    let i = 0;
+    while (i < this._categories.length) {
+      validCategories[this._categories[i]] = true;
+      i++;
+    }
+
+    if (!validCategories[this._selectedCategory]) {
+      this._selectedCategory = 'All';
+    }
+  }
+
+  private _sanitizeColorInput(color: string | undefined): string {
+    if (!color) {
+      return '';
+    }
+
+    const trimmed = color.trim();
+    if (trimmed === '') {
+      return '';
+    }
+
+    const hexRegex = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/;
+    const rgbRegex = /^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}(?:\s*,\s*(0|0?\.\d+|1(\.0)?))?\s*\)$/;
+    const cssNameRegex = /^[a-zA-Z]+$/;
+
+    if (hexRegex.test(trimmed) || rgbRegex.test(trimmed) || cssNameRegex.test(trimmed)) {
+      return trimmed;
+    }
+
+    return '';
+  }
+
+  private _getTopFaqColor(fallbackColor: string): string {
+    const sanitized = this._sanitizeColorInput(this.properties.topFaqColor);
+    if (sanitized) {
+      return sanitized;
+    }
+    return fallbackColor;
+  }
+
+  private _getTopFaqBadgePalette(color: string): { badgeBackground: string; badgeTextColor: string; badgeBorder: string; badgeShadow: string } {
+    const badgeBackground = color;
+    const badgeBorder = this._hexToRgba(color, 0.35) || 'rgba(0, 0, 0, 0.3)';
+    const badgeShadow = this._hexToRgba(color, 0.45) || 'rgba(0, 0, 0, 0.25)';
+    const badgeTextColor = this._getContrastingTextColor(color);
+
+    return {
+      badgeBackground,
+      badgeTextColor,
+      badgeBorder,
+      badgeShadow
+    };
+  }
+
+  private _hexToRgba(color: string, alpha: number): string | null {
+    if (!color) {
+      return null;
+    }
+    const trimmed = color.trim();
+    if (!trimmed || trimmed.charAt(0) !== '#') {
+      return null;
+    }
+
+    let hex = trimmed.substring(1);
+    if (hex.length === 3) {
+      hex = hex.charAt(0) + hex.charAt(0) + hex.charAt(1) + hex.charAt(1) + hex.charAt(2) + hex.charAt(2);
+    }
+
+    if (hex.length !== 6 || hex.match(/[^0-9a-fA-F]/)) {
+      return null;
+    }
+
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    const normalizedAlpha = Math.max(0, Math.min(1, alpha));
+
+    return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + normalizedAlpha + ')';
+  }
+
+  private _parseHexColor(color: string): { r: number; g: number; b: number } | null {
+    if (!color || color.charAt(0) !== '#') {
+      return null;
+    }
+
+    let hex = color.substring(1);
+    if (hex.length === 3) {
+      hex = hex.charAt(0) + hex.charAt(0) + hex.charAt(1) + hex.charAt(1) + hex.charAt(2) + hex.charAt(2);
+    }
+
+    if (hex.length !== 6 || hex.match(/[^0-9a-fA-F]/)) {
+      return null;
+    }
+
+    return {
+      r: parseInt(hex.substring(0, 2), 16),
+      g: parseInt(hex.substring(2, 4), 16),
+      b: parseInt(hex.substring(4, 6), 16)
+    };
+  }
+
+  private _relativeLuminance(r: number, g: number, b: number): number {
+    const srgb = [r, g, b].map((value: number) => {
+      const normalized = value / 255;
+      return normalized <= 0.03928 ? normalized / 12.92 : Math.pow((normalized + 0.055) / 1.055, 2.4);
+    });
+
+    return 0.2126 * srgb[0] + 0.7152 * srgb[1] + 0.0722 * srgb[2];
+  }
+
+  private _getContrastingTextColor(color: string): string {
+    const rgb = this._parseHexColor(color);
+    if (!rgb) {
+      return '#ffffff';
+    }
+
+    const luminance = this._relativeLuminance(rgb.r, rgb.g, rgb.b);
+    return luminance > 0.6 ? '#201f1e' : '#ffffff';
+  }
+
   /**
    * Get filtered FAQ items based on selected category and search query
    */
@@ -158,6 +306,14 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     // First filter by category
     if (this._selectedCategory === 'All') {
       filtered = this._faqItems.slice();
+    } else if (this._selectedCategory === this._topFaqCategoryKey) {
+      let idx = 0;
+      while (idx < this._faqItems.length) {
+        if (this._faqItems[idx].isTopFaq) {
+          filtered.push(this._faqItems[idx]);
+        }
+        idx++;
+      }
     } else {
       let i = 0;
       while (i < this._faqItems.length) {
@@ -203,6 +359,18 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
   private _getTotalItemsInCategory(): number {
     if (this._selectedCategory === 'All') {
       return this._faqItems.length;
+    }
+
+    if (this._selectedCategory === this._topFaqCategoryKey) {
+      let topCount = 0;
+      let idx = 0;
+      while (idx < this._faqItems.length) {
+        if (this._faqItems[idx].isTopFaq) {
+          topCount++;
+        }
+        idx++;
+      }
+      return topCount;
     }
 
     let count = 0;
@@ -467,8 +635,10 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
           searchInHeaderHtml = '<div class="' + styles.searchInHeader + '">' + searchInputHtml + '</div>';
         }
 
-        // Build category tabs
-        if (this.properties.categoryColumn && this._categories.length > 0) {
+        // Build category tabs (All + optional Top FAQ + categories)
+        const hasCategoryTabs = !!(this.properties.categoryColumn && this._categories.length > 0);
+        const showTopFaqTab = this._isTopFaqEnabled();
+        if (hasCategoryTabs || showTopFaqTab) {
           const tabsArray: string[] = [];
           
           const allActiveClass = this._selectedCategory === 'All' ? ' ' + styles.activeTab : '';
@@ -481,20 +651,44 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
             '</button>'
           );
 
-          let catIdx = 0;
-          while (catIdx < this._categories.length) {
-            const category = this._categories[catIdx];
-            const isActive = this._selectedCategory === category;
-            const activeClass = isActive ? ' ' + styles.activeTab : '';
+          if (showTopFaqTab) {
+            const isTopActive = this._selectedCategory === this._topFaqCategoryKey;
+            const topActiveClass = isTopActive ? ' ' + styles.activeTab : '';
+            const topFaqColor = this._getTopFaqColor(headerBgColor);
+            const topBadgePalette = this._getTopFaqBadgePalette(topFaqColor);
+            const badgeStyle = ' style="--topFaqBadgeBackground: ' + this._escapeHtml(topBadgePalette.badgeBackground) +
+              '; --topFaqBadgeColor: ' + this._escapeHtml(topBadgePalette.badgeTextColor) +
+              '; --topFaqBadgeBorder: ' + this._escapeHtml(topBadgePalette.badgeBorder) +
+              '; --topFaqBadgeShadow: ' + this._escapeHtml(topBadgePalette.badgeShadow) + ';"';
             tabsArray.push(
-              '<button class="' + styles.categoryTab + activeClass + '" ' +
-              'data-category="' + this._escapeHtml(category) + '" ' +
-              'style="color: ' + (isActive ? headerBgColor : bodyText) + '; ' +
-              'border-bottom-color: ' + (isActive ? headerBgColor : 'transparent') + ';">' +
-              this._escapeHtml(category) +
+              '<button class="' + styles.categoryTab + topActiveClass + '" ' +
+              'data-category="' + this._topFaqCategoryKey + '" ' +
+              'style="color: ' + (isTopActive ? headerBgColor : bodyText) + '; ' +
+              'border-bottom-color: ' + (isTopActive ? headerBgColor : 'transparent') + ';">' +
+              '<span class="' + styles.topFaqTab + '">' +
+              '<span class="' + styles.topFaqBadge + '"' + badgeStyle + '>⭐</span>' +
+              '<span class="' + styles.topFaqBadgeLabel + '">Top FAQ</span>' +
+              '</span>' +
               '</button>'
             );
-            catIdx++;
+          }
+
+          if (hasCategoryTabs) {
+            let catIdx = 0;
+            while (catIdx < this._categories.length) {
+              const category = this._categories[catIdx];
+              const isActive = this._selectedCategory === category;
+              const activeClass = isActive ? ' ' + styles.activeTab : '';
+              tabsArray.push(
+                '<button class="' + styles.categoryTab + activeClass + '" ' +
+                'data-category="' + this._escapeHtml(category) + '" ' +
+                'style="color: ' + (isActive ? headerBgColor : bodyText) + '; ' +
+                'border-bottom-color: ' + (isActive ? headerBgColor : 'transparent') + ';">' +
+                this._escapeHtml(category) +
+                '</button>'
+              );
+              catIdx++;
+            }
           }
 
           categoryTabsHtml = '<div class="' + styles.categoryTabs + '" style="border-bottom-color: ' + neutralLight + ';">' +
@@ -809,23 +1003,17 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       this.properties.selectedList,
       this.properties.titleColumn,
       this.properties.descriptionColumn,
-      this.properties.categoryColumn || undefined
+      this.properties.categoryColumn || undefined,
+      this.properties.topFaqColumn || undefined
     )
       .then((items: IFaqItem[]) => {
         this._faqItems = items;
         this._extractCategories();
-        let categoryExists = false;
-        let i = 0;
-        while (i < this._categories.length) {
-          if (this._categories[i] === this._selectedCategory) {
-            categoryExists = true;
-            break;
-          }
-          i++;
+        const hasTopFaqItems = this._isTopFaqEnabled() && this._hasTopFaqItems();
+        if (hasTopFaqItems && this._selectedCategory === 'All') {
+          this._selectedCategory = this._topFaqCategoryKey;
         }
-        if (this._selectedCategory !== 'All' && !categoryExists) {
-          this._selectedCategory = 'All';
-        }
+        this._ensureValidCategorySelection();
       })
       .catch((error: Error) => {
         console.error('Error loading FAQ items:', error);
@@ -845,6 +1033,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       this.properties.titleColumn = '';
       this.properties.descriptionColumn = '';
       this.properties.categoryColumn = '';
+      this.properties.topFaqColumn = '';
       this._faqItems = [];
       this._categories = [];
       this._selectedCategory = 'All';
@@ -854,7 +1043,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
         self.context.propertyPane.refresh();
         self.render();
       });
-    } else if ((propertyPath === 'titleColumn' || propertyPath === 'descriptionColumn' || propertyPath === 'categoryColumn') && newValue !== oldValue) {
+    } else if ((propertyPath === 'titleColumn' || propertyPath === 'descriptionColumn' || propertyPath === 'categoryColumn' || propertyPath === 'topFaqColumn') && newValue !== oldValue) {
       this._loadFaqItems().then(function(): void {
         self.render();
       });
@@ -929,6 +1118,23 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     return options;
   }
 
+  private _getTopFaqColumnOptions(): IPropertyPaneDropdownOption[] {
+    const options: IPropertyPaneDropdownOption[] = [
+      { key: '', text: '-- No Top FAQ column --' }
+    ];
+
+    let i = 0;
+    while (i < this._columns.length) {
+      const col = this._columns[i];
+      if (col.type === 'Boolean' || col.type === 'Choice' || col.type === 'Text') {
+        options.push({ key: col.internalName, text: col.title });
+      }
+      i++;
+    }
+
+    return options;
+  }
+
   private _getFontSizeOptions(): IPropertyPaneDropdownOption[] {
     return [
       { key: '10', text: '10px - Extra Small' },
@@ -973,6 +1179,11 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
                   label: 'Webpart Description Font Size',
                   options: this._getFontSizeOptions(),
                   selectedKey: this.properties.webpartDescriptionFontSize || '14'
+                }),
+                PropertyPaneTextField('topFaqColor', {
+                  label: 'Top FAQ Accent Color',
+                  placeholder: '#0078d4 or red',
+                  description: 'Leave blank to inherit the theme color from the page.'
                 })
               ]
             },
@@ -1050,6 +1261,11 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
                 PropertyPaneDropdown('categoryColumn', {
                   label: 'Category Column (for tabs)',
                   options: this._getCategoryColumnOptions(),
+                  disabled: !this.properties.selectedList
+                }),
+                PropertyPaneDropdown('topFaqColumn', {
+                  label: 'Top FAQ Column (Yes/No)',
+                  options: this._getTopFaqColumnOptions(),
                   disabled: !this.properties.selectedList
                 })
               ]

@@ -9,7 +9,6 @@ export interface IListInfo {
   title: string;
 }
 
-//Vishnu to fix security issue based on scann
 /**
  * Interface for SharePoint column information
  */
@@ -36,6 +35,7 @@ export interface IFaqItem {
   title: string;
   description: string;
   category: string;
+  isTopFaq: boolean;
   attachments: IAttachment[];
 }
 
@@ -70,11 +70,13 @@ export class SharePointService {
       })
       .then((data: { value: Array<{ Id: string; Title: string }> }) => {
         const lists: IListInfo[] = [];
-        for (let i = 0; i < data.value.length; i++) {
+        let i = 0;
+        while (i < data.value.length) {
           lists.push({
             id: data.value[i].Id,
             title: data.value[i].Title
           });
+          i++;
         }
         return lists;
       });
@@ -82,11 +84,11 @@ export class SharePointService {
 
   /**
    * Get columns for a specific list
-   * Returns Text, Note, and Choice columns
+   * Returns Text, Note, Choice, and Boolean columns
    */
   public getListColumns(listId: string): Promise<IColumnInfo[]> {
-    // Filter for Text, Note, and Choice field types
-    const endpoint = this._siteUrl + '/_api/web/lists(guid\'' + listId + '\')/fields?$filter=(TypeAsString eq \'Text\' or TypeAsString eq \'Note\' or TypeAsString eq \'Choice\') and Hidden eq false and ReadOnlyField eq false&$select=Id,InternalName,Title,TypeAsString&$orderby=Title';
+    // Filter for Text, Note, Choice, and Boolean field types
+    const endpoint = this._siteUrl + '/_api/web/lists(guid\'' + listId + '\')/fields?$filter=(TypeAsString eq \'Text\' or TypeAsString eq \'Note\' or TypeAsString eq \'Choice\' or TypeAsString eq \'Boolean\') and Hidden eq false and ReadOnlyField eq false&$select=Id,InternalName,Title,TypeAsString&$orderby=Title';
 
     return this._context.spHttpClient.get(
       endpoint,
@@ -100,13 +102,15 @@ export class SharePointService {
       })
       .then((data: { value: Array<{ Id: string; InternalName: string; Title: string; TypeAsString: string }> }) => {
         const columns: IColumnInfo[] = [];
-        for (let i = 0; i < data.value.length; i++) {
+        let i = 0;
+        while (i < data.value.length) {
           columns.push({
             id: data.value[i].Id,
             internalName: data.value[i].InternalName,
             title: data.value[i].Title,
             type: data.value[i].TypeAsString
           });
+          i++;
         }
         return columns;
       });
@@ -120,7 +124,8 @@ export class SharePointService {
     listId: string,
     titleColumn: string,
     descriptionColumn: string,
-    categoryColumn?: string
+    categoryColumn?: string,
+    topFaqColumn?: string
   ): Promise<IFaqItem[]> {
     // Build select query - always include Id and Attachments
     const selectFields: string[] = ['Id', titleColumn];
@@ -129,6 +134,9 @@ export class SharePointService {
     }
     if (categoryColumn && categoryColumn !== titleColumn && categoryColumn !== descriptionColumn) {
       selectFields.push(categoryColumn);
+    }
+    if (topFaqColumn && selectFields.indexOf(topFaqColumn) === -1) {
+      selectFields.push(topFaqColumn);
     }
     selectFields.push('Attachments');
 
@@ -150,9 +158,11 @@ export class SharePointService {
         // Process items and fetch attachments
         const itemPromises: Array<Promise<IFaqItem>> = [];
 
-        for (let i = 0; i < data.value.length; i++) {
+        let i = 0;
+        while (i < data.value.length) {
           const item = data.value[i];
-          itemPromises.push(self._processItem(item, listId, titleColumn, descriptionColumn, categoryColumn));
+          itemPromises.push(self._processItem(item, listId, titleColumn, descriptionColumn, categoryColumn, topFaqColumn));
+          i++;
         }
 
         return Promise.all(itemPromises);
@@ -160,10 +170,12 @@ export class SharePointService {
       .then((items: IFaqItem[]) => {
         // Filter out items without titles
         const filteredItems: IFaqItem[] = [];
-        for (let i = 0; i < items.length; i++) {
+        let i = 0;
+        while (i < items.length) {
           if (items[i].title && items[i].title.trim() !== '') {
             filteredItems.push(items[i]);
           }
+          i++;
         }
         return filteredItems;
       });
@@ -177,14 +189,36 @@ export class SharePointService {
     listId: string,
     titleColumn: string,
     descriptionColumn: string,
-    categoryColumn?: string
+    categoryColumn?: string,
+    topFaqColumn?: string
   ): Promise<IFaqItem> {
     const self = this;
+    
+    // Determine if item is marked as Top FAQ
+    let isTopFaq = false;
+    if (topFaqColumn && item[topFaqColumn] !== undefined) {
+      const topFaqValue = item[topFaqColumn];
+      // Handle Boolean (Yes/No) columns
+      if (typeof topFaqValue === 'boolean') {
+        isTopFaq = topFaqValue === true;
+      }
+      // Handle Choice columns with "Yes"/"No" values
+      else if (typeof topFaqValue === 'string') {
+        const lowerValue = topFaqValue.trim().toLowerCase();
+        isTopFaq = lowerValue === 'yes' || lowerValue === 'true' || lowerValue === '1' || lowerValue === 'y';
+      }
+      // Handle numeric values (1 = yes)
+      else if (typeof topFaqValue === 'number') {
+        isTopFaq = topFaqValue === 1;
+      }
+    }
+
     const faqItem: IFaqItem = {
       id: item.Id as number,
       title: (item[titleColumn] as string) || '',
       description: (item[descriptionColumn] as string) || '',
       category: categoryColumn ? ((item[categoryColumn] as string) || '') : '',
+      isTopFaq: isTopFaq,
       attachments: []
     };
 
@@ -222,11 +256,13 @@ export class SharePointService {
         const attachments: IAttachment[] = [];
         const baseUrl = self._context.pageContext.web.absoluteUrl.split('/').slice(0, 3).join('/');
 
-        for (let i = 0; i < data.value.length; i++) {
+        let i = 0;
+        while (i < data.value.length) {
           attachments.push({
             fileName: data.value[i].FileName,
             url: baseUrl + data.value[i].ServerRelativeUrl
           });
+          i++;
         }
 
         return attachments;
