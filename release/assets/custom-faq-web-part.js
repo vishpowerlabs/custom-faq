@@ -424,7 +424,7 @@ var _themeState = initializeThemeState();
 /**
  * Matches theming tokens. For example, "[theme: themeSlotName, default: #FFF]" (including the quotes).
  */
-var _themeTokenRegex = /[\'\"]\[theme:\s*(\w+)\s*(?:\,\s*default:\s*([\\"\']?[\.\,\(\)\#\-\s\w]*[\.\,\(\)\#\-\w][\"\']?))?\s*\][\'\"]/g;
+var _themeTokenRegex = /[\'\"]\[theme:\s*([A-Za-z0-9_-]+)\s*(?:,\s*default:\s*([^\]\r\n]+?))?\s*\][\'\"]/g;
 var now = function () {
     return typeof performance !== 'undefined' && !!performance.now ? performance.now() : Date.now();
 };
