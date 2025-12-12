@@ -249,9 +249,9 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       return null;
     }
 
-    const r = parseInt(hex.substring(0, 2), 16);
-    const g = parseInt(hex.substring(2, 4), 16);
-    const b = parseInt(hex.substring(4, 6), 16);
+    const r = Number.parseInt(hex.substring(0, 2), 16);
+    const g = Number.parseInt(hex.substring(2, 4), 16);
+    const b = Number.parseInt(hex.substring(4, 6), 16);
     const normalizedAlpha = Math.max(0, Math.min(1, alpha));
 
     return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + normalizedAlpha + ')';
@@ -272,9 +272,9 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     }
 
     return {
-      r: parseInt(hex.substring(0, 2), 16),
-      g: parseInt(hex.substring(2, 4), 16),
-      b: parseInt(hex.substring(4, 6), 16)
+      r: Number.parseInt(hex.substring(0, 2), 16),
+      g: Number.parseInt(hex.substring(2, 4), 16),
+      b: Number.parseInt(hex.substring(4, 6), 16)
     };
   }
 
