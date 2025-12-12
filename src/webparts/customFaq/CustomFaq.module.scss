@@ -143,7 +143,7 @@
   .searchInput {
     background-color: rgba(255, 255, 255, 0.15);
     border-color: rgba(255, 255, 255, 0.3);
-    color: #ffffff;
+ color: var(--bodyTextAlt, #ffffff);
     
     &::placeholder {
       color: rgba(255, 255, 255, 0.7);
@@ -240,7 +240,7 @@
   font-size: 16px;
   font-weight: 700;
   flex-shrink: 0;
-  color: var(--topFaqBadgeColor, #ffffff);
+ color: var(--topFaqBadgeColor, #1f1f1f);
   background-color: var(--topFaqBadgeBackground, #ffb900);
   border: 1px solid var(--topFaqBadgeBorder, #c78600);
   box-shadow: 0 6px 12px var(--topFaqBadgeShadow, rgba(0, 0, 0, 0.25));
