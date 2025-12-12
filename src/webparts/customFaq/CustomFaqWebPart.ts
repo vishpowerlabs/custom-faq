@@ -37,7 +37,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
   private _lists: IListInfo[] = [];
   private _columns: IColumnInfo[] = [];
   private _faqItems: IFaqItem[] = [];
-  private _themeProvider: ThemeProvider;
+  private _themeProvider: ThemeProvider | undefined;
   private _themeVariant: IReadonlyTheme | undefined;
   private _selectedCategory: string = 'All';
   private _categories: string[] = [];
@@ -46,30 +46,40 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
    * Initialize the web part
    */
   protected onInit(): Promise<void> {
-    // Initialize SharePoint service
-    this._spService = new SharePointService(this.context as WebPartContext);
+    return super.onInit().then((): void => {
+      // Initialize SharePoint service
+      this._spService = new SharePointService(this.context as WebPartContext);
 
-    // Consume the ThemeProvider service for section background support
-    this._themeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey);
+      // Try to consume the ThemeProvider service for section background support
+      try {
+        this._themeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey);
+        if (this._themeProvider) {
+          // Get the current theme variant
+          this._themeVariant = this._themeProvider.tryGetTheme();
 
-    // Get the current theme variant
-    this._themeVariant = this._themeProvider.tryGetTheme();
+          // Register handler for theme changes
+          this._themeProvider.themeChangedEvent.add(this, this._handleThemeChangedEvent);
+        }
+      } catch (error) {
+        console.log('ThemeProvider not available:', error);
+      }
 
-    // Apply CSS variables from theme
-    if (this._themeVariant) {
-      this._setCSSVariables(this._themeVariant);
-    }
-
-    // Register handler for theme changes
-    this._themeProvider.themeChangedEvent.add(this, this._handleThemeChangedEvent);
-
-    // Load initial data
-    return this._loadLists().then(() => {
+      // Apply CSS variables from theme
+      if (this._themeVariant) {
+        this._setCSSVariables(this._themeVariant);
+      }
+    }).then((): Promise<void> => {
+      // Load initial data
+      return this._loadLists();
+    }).then((): Promise<void> => {
       if (this.properties.selectedList) {
-        return this._loadColumns().then(() => {
+        return this._loadColumns().then((): Promise<void> => {
           return this._loadFaqItems();
         });
       }
+      return Promise.resolve();
+    }).catch((error: Error) => {
+      console.error('Error during initialization:', error);
       return Promise.resolve();
     });
   }
@@ -93,30 +103,34 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       return;
     }
 
-    // Set semantic colors as CSS variables
-    if (theme.semanticColors) {
-      const semanticColors: { [key: string]: string } = theme.semanticColors as { [key: string]: string };
-      const semanticKeys = Object.keys(semanticColors);
-      for (let i = 0; i < semanticKeys.length; i++) {
-        const key = semanticKeys[i];
-        const value = semanticColors[key];
-        if (value) {
-          this.domElement.style.setProperty('--' + key, value);
+    try {
+      // Set semantic colors as CSS variables
+      if (theme.semanticColors) {
+        const semanticColors: { [key: string]: string } = theme.semanticColors as { [key: string]: string };
+        const semanticKeys = Object.keys(semanticColors);
+        for (let i = 0; i < semanticKeys.length; i++) {
+          const key = semanticKeys[i];
+          const value = semanticColors[key];
+          if (value) {
+            this.domElement.style.setProperty('--' + key, value);
+          }
         }
       }
-    }
 
-    // Set palette colors as CSS variables
-    if (theme.palette) {
-      const palette: { [key: string]: string } = theme.palette as { [key: string]: string };
-      const paletteKeys = Object.keys(palette);
-      for (let i = 0; i < paletteKeys.length; i++) {
-        const key = paletteKeys[i];
-        const value = palette[key];
-        if (value) {
-          this.domElement.style.setProperty('--' + key, value);
+      // Set palette colors as CSS variables
+      if (theme.palette) {
+        const palette: { [key: string]: string } = theme.palette as { [key: string]: string };
+        const paletteKeys = Object.keys(palette);
+        for (let i = 0; i < paletteKeys.length; i++) {
+          const key = paletteKeys[i];
+          const value = palette[key];
+          if (value) {
+            this.domElement.style.setProperty('--' + key, value);
+          }
         }
       }
+    } catch (error) {
+      console.error('Error setting CSS variables:', error);
     }
   }
 
@@ -159,7 +173,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
   /**
    * Get font size value with px suffix
    */
-  private _getFontSize(size: string, defaultSize: string): string {
+  private _getFontSize(size: string | undefined, defaultSize: string): string {
     return (size || defaultSize) + 'px';
   }
 
@@ -167,187 +181,192 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
    * Render the web part
    */
   public render(): void {
-    // Build inline styles from theme for elements that need direct styling
-    const semanticColors = this._themeVariant ? this._themeVariant.semanticColors : undefined;
-    const palette = this._themeVariant ? this._themeVariant.palette : undefined;
+    try {
+      // Build inline styles from theme for elements that need direct styling
+      const semanticColors = this._themeVariant ? this._themeVariant.semanticColors : undefined;
+      const palette = this._themeVariant ? this._themeVariant.palette : undefined;
 
-    // Header background using theme primary color
-    const headerBgColor = (palette && palette.themePrimary) ? palette.themePrimary : '#0078d4';
-    const headerBgColorDark = (palette && palette.themeDark) ? palette.themeDark : '#005a9e';
+      // Header background using theme primary color
+      const headerBgColor = (palette && palette.themePrimary) ? palette.themePrimary : '#0078d4';
+      const headerBgColorDark = (palette && palette.themeDark) ? palette.themeDark : '#005a9e';
 
-    // Body colors
-    const bodyBackground = (semanticColors && semanticColors.bodyBackground) ? semanticColors.bodyBackground : '#ffffff';
-    const bodyText = (semanticColors && semanticColors.bodyText) ? semanticColors.bodyText : '#323130';
-    const bodySubtext = (semanticColors && semanticColors.bodySubtext) ? semanticColors.bodySubtext : '#605e5c';
+      // Body colors
+      const bodyBackground = (semanticColors && semanticColors.bodyBackground) ? semanticColors.bodyBackground : '#ffffff';
+      const bodyText = (semanticColors && semanticColors.bodyText) ? semanticColors.bodyText : '#323130';
+      const bodySubtext = (semanticColors && semanticColors.bodySubtext) ? semanticColors.bodySubtext : '#605e5c';
 
-    // Interactive colors
-    const linkColor = (semanticColors && semanticColors.link) ? semanticColors.link : ((palette && palette.themePrimary) ? palette.themePrimary : '#0078d4');
+      // Interactive colors
+      const linkColor = (semanticColors && semanticColors.link) ? semanticColors.link : ((palette && palette.themePrimary) ? palette.themePrimary : '#0078d4');
 
-    // Border and divider colors
-    const bodyDivider = (semanticColors && semanticColors.bodyDivider) ? semanticColors.bodyDivider : '#edebe9';
+      // Border and divider colors
+      const bodyDivider = (semanticColors && semanticColors.bodyDivider) ? semanticColors.bodyDivider : '#edebe9';
 
-    // Hover states
-    const listItemBackgroundHovered = (semanticColors && semanticColors.listItemBackgroundHovered) ? semanticColors.listItemBackgroundHovered : '#f3f2f1';
+      // Hover states
+      const listItemBackgroundHovered = (semanticColors && semanticColors.listItemBackgroundHovered) ? semanticColors.listItemBackgroundHovered : '#f3f2f1';
 
-    // Card/container background
-    const cardBackground = (semanticColors && semanticColors.cardStandoutBackground) ? semanticColors.cardStandoutBackground : bodyBackground;
+      // Card/container background
+      const cardBackground = (semanticColors && semanticColors.cardStandoutBackground) ? semanticColors.cardStandoutBackground : bodyBackground;
 
-    // Attachment area background
-    const neutralLighter = (palette && palette.neutralLighter) ? palette.neutralLighter : '#f4f4f4';
-    const neutralTertiary = (palette && palette.neutralTertiary) ? palette.neutralTertiary : '#a6a6a6';
-    const neutralLight = (palette && palette.neutralLight) ? palette.neutralLight : '#eaeaea';
+      // Attachment area background
+      const neutralLighter = (palette && palette.neutralLighter) ? palette.neutralLighter : '#f4f4f4';
+      const neutralTertiary = (palette && palette.neutralTertiary) ? palette.neutralTertiary : '#a6a6a6';
+      const neutralLight = (palette && palette.neutralLight) ? palette.neutralLight : '#eaeaea';
 
-    // Font sizes
-    const webpartTitleFontSize = this._getFontSize(this.properties.webpartTitleFontSize, '24');
-    const webpartDescriptionFontSize = this._getFontSize(this.properties.webpartDescriptionFontSize, '14');
-    const faqTitleFontSize = this._getFontSize(this.properties.faqTitleFontSize, '16');
-    const faqDescriptionFontSize = this._getFontSize(this.properties.faqDescriptionFontSize, '14');
+      // Font sizes with defaults
+      const webpartTitleFontSize = this._getFontSize(this.properties.webpartTitleFontSize, '24');
+      const webpartDescriptionFontSize = this._getFontSize(this.properties.webpartDescriptionFontSize, '14');
+      const faqTitleFontSize = this._getFontSize(this.properties.faqTitleFontSize, '16');
+      const faqDescriptionFontSize = this._getFontSize(this.properties.faqDescriptionFontSize, '14');
 
-    let faqItemsHtml = '';
-    let categoryTabsHtml = '';
+      let faqItemsHtml = '';
+      let categoryTabsHtml = '';
 
-    if (!this.properties.selectedList) {
-      faqItemsHtml = '<div class="' + styles.emptyState + '" style="color: ' + bodySubtext + ';">' +
-        '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="' + neutralTertiary + '" stroke-width="1.5">' +
-        '<circle cx="12" cy="12" r="10"/>' +
-        '<path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>' +
-        '<line x1="12" y1="17" x2="12.01" y2="17"/>' +
-        '</svg>' +
-        '<p>Please configure the web part by selecting a list from the property pane.</p>' +
-        '</div>';
-    } else {
-      // Build category tabs if category column is selected
-      if (this.properties.categoryColumn && this._categories.length > 0) {
-        const tabsArray: string[] = [];
-        
-        // Add "All" tab
-        const allActiveClass = this._selectedCategory === 'All' ? ' ' + styles.activeTab : '';
-        tabsArray.push(
-          '<button class="' + styles.categoryTab + allActiveClass + '" ' +
-          'data-category="All" ' +
-          'style="color: ' + (this._selectedCategory === 'All' ? headerBgColor : bodyText) + '; ' +
-          'border-bottom-color: ' + (this._selectedCategory === 'All' ? headerBgColor : 'transparent') + ';">' +
-          'All' +
-          '</button>'
-        );
-
-        // Add category tabs
-        for (let i = 0; i < this._categories.length; i++) {
-          const category = this._categories[i];
-          const isActive = this._selectedCategory === category;
-          const activeClass = isActive ? ' ' + styles.activeTab : '';
-          tabsArray.push(
-            '<button class="' + styles.categoryTab + activeClass + '" ' +
-            'data-category="' + this._escapeHtml(category) + '" ' +
-            'style="color: ' + (isActive ? headerBgColor : bodyText) + '; ' +
-            'border-bottom-color: ' + (isActive ? headerBgColor : 'transparent') + ';">' +
-            this._escapeHtml(category) +
-            '</button>'
-          );
-        }
-
-        categoryTabsHtml = '<div class="' + styles.categoryTabs + '" style="border-bottom-color: ' + neutralLight + ';">' +
-          tabsArray.join('') +
-          '</div>';
-      }
-
-      // Get filtered items
-      const filteredItems = this._getFilteredItems();
-
-      if (filteredItems.length === 0) {
+      if (!this.properties.selectedList) {
         faqItemsHtml = '<div class="' + styles.emptyState + '" style="color: ' + bodySubtext + ';">' +
           '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="' + neutralTertiary + '" stroke-width="1.5">' +
-          '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>' +
-          '<polyline points="14 2 14 8 20 8"/>' +
-          '<line x1="12" y1="18" x2="12" y2="12"/>' +
-          '<line x1="9" y1="15" x2="15" y2="15"/>' +
+          '<circle cx="12" cy="12" r="10"/>' +
+          '<path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>' +
+          '<line x1="12" y1="17" x2="12.01" y2="17"/>' +
           '</svg>' +
-          '<p>No FAQ items found' + (this._selectedCategory !== 'All' ? ' in this category' : '') + '.</p>' +
+          '<p>Please configure the web part by selecting a list from the property pane.</p>' +
           '</div>';
       } else {
-        const itemsHtmlArray: string[] = [];
-        for (let index = 0; index < filteredItems.length; index++) {
-          const item = filteredItems[index];
-          let attachmentsHtml = '';
+        // Build category tabs if category column is selected
+        if (this.properties.categoryColumn && this._categories.length > 0) {
+          const tabsArray: string[] = [];
+          
+          // Add "All" tab
+          const allActiveClass = this._selectedCategory === 'All' ? ' ' + styles.activeTab : '';
+          tabsArray.push(
+            '<button class="' + styles.categoryTab + allActiveClass + '" ' +
+            'data-category="All" ' +
+            'style="color: ' + (this._selectedCategory === 'All' ? headerBgColor : bodyText) + '; ' +
+            'border-bottom-color: ' + (this._selectedCategory === 'All' ? headerBgColor : 'transparent') + ';">' +
+            'All' +
+            '</button>'
+          );
 
-          if (item.attachments && item.attachments.length > 0) {
-            const attachmentLinksArray: string[] = [];
-            for (let j = 0; j < item.attachments.length; j++) {
-              const att = item.attachments[j];
-              attachmentLinksArray.push(
-                '<a href="' + att.url + '" target="_blank" rel="noopener noreferrer" class="' + styles.attachmentLink + '" style="color: ' + linkColor + ';">' +
-                '<span class="' + styles.attachmentIcon + '">' +
-                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
-                '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>' +
-                '<polyline points="14 2 14 8 20 8"/>' +
-                '</svg>' +
-                '</span>' +
-                this._escapeHtml(att.fileName) +
-                '</a>'
-              );
-            }
-
-            attachmentsHtml = '<div class="' + styles.attachments + '" style="background-color: ' + neutralLighter + ';">' +
-              '<div class="' + styles.attachmentsLabel + '" style="color: ' + neutralTertiary + ';">' +
-              '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
-              '<path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>' +
-              '</svg>' +
-              ' Attachments' +
-              '</div>' +
-              attachmentLinksArray.join('') +
-              '</div>';
+          // Add category tabs
+          for (let i = 0; i < this._categories.length; i++) {
+            const category = this._categories[i];
+            const isActive = this._selectedCategory === category;
+            const activeClass = isActive ? ' ' + styles.activeTab : '';
+            tabsArray.push(
+              '<button class="' + styles.categoryTab + activeClass + '" ' +
+              'data-category="' + this._escapeHtml(category) + '" ' +
+              'style="color: ' + (isActive ? headerBgColor : bodyText) + '; ' +
+              'border-bottom-color: ' + (isActive ? headerBgColor : 'transparent') + ';">' +
+              this._escapeHtml(category) +
+              '</button>'
+            );
           }
 
-          itemsHtmlArray.push(
-            '<div class="' + styles.faqItem + '" data-index="' + index + '">' +
-            '<div class="' + styles.faqQuestion + '" style="border-bottom-color: ' + bodyDivider + ';" data-hover-bg="' + listItemBackgroundHovered + '">' +
-            '<span class="' + styles.faqQuestionText + '" style="color: ' + bodyText + '; font-size: ' + faqTitleFontSize + ';">' +
-            this._escapeHtml(item.title) +
-            '</span>' +
-            '<span class="' + styles.faqChevron + '" style="color: ' + bodySubtext + ';">' +
-            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
-            '<path d="M6 9l6 6 6-6"/>' +
-            '</svg>' +
-            '</span>' +
-            '</div>' +
-            '<div class="' + styles.faqAnswer + '">' +
-            '<div class="' + styles.faqAnswerContent + '" style="color: ' + bodySubtext + '; font-size: ' + faqDescriptionFontSize + ';">' +
-            this._formatDescription(item.description) +
-            '</div>' +
-            attachmentsHtml +
-            '</div>' +
-            '</div>'
-          );
+          categoryTabsHtml = '<div class="' + styles.categoryTabs + '" style="border-bottom-color: ' + neutralLight + ';">' +
+            tabsArray.join('') +
+            '</div>';
         }
-        faqItemsHtml = itemsHtmlArray.join('');
+
+        // Get filtered items
+        const filteredItems = this._getFilteredItems();
+
+        if (filteredItems.length === 0) {
+          faqItemsHtml = '<div class="' + styles.emptyState + '" style="color: ' + bodySubtext + ';">' +
+            '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="' + neutralTertiary + '" stroke-width="1.5">' +
+            '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>' +
+            '<polyline points="14 2 14 8 20 8"/>' +
+            '<line x1="12" y1="18" x2="12" y2="12"/>' +
+            '<line x1="9" y1="15" x2="15" y2="15"/>' +
+            '</svg>' +
+            '<p>No FAQ items found' + (this._selectedCategory !== 'All' ? ' in this category' : '') + '.</p>' +
+            '</div>';
+        } else {
+          const itemsHtmlArray: string[] = [];
+          for (let index = 0; index < filteredItems.length; index++) {
+            const item = filteredItems[index];
+            let attachmentsHtml = '';
+
+            if (item.attachments && item.attachments.length > 0) {
+              const attachmentLinksArray: string[] = [];
+              for (let j = 0; j < item.attachments.length; j++) {
+                const att = item.attachments[j];
+                attachmentLinksArray.push(
+                  '<a href="' + att.url + '" target="_blank" rel="noopener noreferrer" class="' + styles.attachmentLink + '" style="color: ' + linkColor + ';">' +
+                  '<span class="' + styles.attachmentIcon + '">' +
+                  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                  '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>' +
+                  '<polyline points="14 2 14 8 20 8"/>' +
+                  '</svg>' +
+                  '</span>' +
+                  this._escapeHtml(att.fileName) +
+                  '</a>'
+                );
+              }
+
+              attachmentsHtml = '<div class="' + styles.attachments + '" style="background-color: ' + neutralLighter + ';">' +
+                '<div class="' + styles.attachmentsLabel + '" style="color: ' + neutralTertiary + ';">' +
+                '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+                '<path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>' +
+                '</svg>' +
+                ' Attachments' +
+                '</div>' +
+                attachmentLinksArray.join('') +
+                '</div>';
+            }
+
+            itemsHtmlArray.push(
+              '<div class="' + styles.faqItem + '" data-index="' + index + '">' +
+              '<div class="' + styles.faqQuestion + '" style="border-bottom-color: ' + bodyDivider + ';" data-hover-bg="' + listItemBackgroundHovered + '">' +
+              '<span class="' + styles.faqQuestionText + '" style="color: ' + bodyText + '; font-size: ' + faqTitleFontSize + ';">' +
+              this._escapeHtml(item.title) +
+              '</span>' +
+              '<span class="' + styles.faqChevron + '" style="color: ' + bodySubtext + ';">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">' +
+              '<path d="M6 9l6 6 6-6"/>' +
+              '</svg>' +
+              '</span>' +
+              '</div>' +
+              '<div class="' + styles.faqAnswer + '">' +
+              '<div class="' + styles.faqAnswerContent + '" style="color: ' + bodySubtext + '; font-size: ' + faqDescriptionFontSize + ';">' +
+              this._formatDescription(item.description) +
+              '</div>' +
+              attachmentsHtml +
+              '</div>' +
+              '</div>'
+            );
+          }
+          faqItemsHtml = itemsHtmlArray.join('');
+        }
       }
+
+      // Build header section
+      let headerHtml = '';
+      if (this.properties.webpartTitle || this.properties.webpartDescription) {
+        headerHtml = '<div class="' + styles.faqHeader + '" style="background: linear-gradient(135deg, ' + headerBgColor + ' 0%, ' + headerBgColorDark + ' 100%);">';
+        if (this.properties.webpartTitle) {
+          headerHtml += '<h2 class="' + styles.faqTitle + '" style="font-size: ' + webpartTitleFontSize + ';">' + this._escapeHtml(this.properties.webpartTitle) + '</h2>';
+        }
+        if (this.properties.webpartDescription) {
+          headerHtml += '<p class="' + styles.faqDescription + '" style="font-size: ' + webpartDescriptionFontSize + ';">' + this._escapeHtml(this.properties.webpartDescription) + '</p>';
+        }
+        headerHtml += '</div>';
+      }
+
+      this.domElement.innerHTML = '<div class="' + styles.customFaq + '" style="background-color: ' + cardBackground + ';">' +
+        headerHtml +
+        categoryTabsHtml +
+        '<div class="' + styles.faqList + '">' +
+        faqItemsHtml +
+        '</div>' +
+        '</div>';
+
+      // Attach event listeners for accordion functionality
+      this._attachEventListeners();
+      // Attach event listeners for category tabs
+      this._attachTabEventListeners();
+    } catch (error) {
+      console.error('Error during render:', error);
+      this.domElement.innerHTML = '<div style="padding: 20px; color: red;">Error rendering web part. Please check console for details.</div>';
     }
-
-    // Build header section
-    let headerHtml = '';
-    if (this.properties.webpartTitle || this.properties.webpartDescription) {
-      headerHtml = '<div class="' + styles.faqHeader + '" style="background: linear-gradient(135deg, ' + headerBgColor + ' 0%, ' + headerBgColorDark + ' 100%);">';
-      if (this.properties.webpartTitle) {
-        headerHtml += '<h2 class="' + styles.faqTitle + '" style="font-size: ' + webpartTitleFontSize + ';">' + this._escapeHtml(this.properties.webpartTitle) + '</h2>';
-      }
-      if (this.properties.webpartDescription) {
-        headerHtml += '<p class="' + styles.faqDescription + '" style="font-size: ' + webpartDescriptionFontSize + ';">' + this._escapeHtml(this.properties.webpartDescription) + '</p>';
-      }
-      headerHtml += '</div>';
-    }
-
-    this.domElement.innerHTML = '<div class="' + styles.customFaq + '" style="background-color: ' + cardBackground + ';">' +
-      headerHtml +
-      categoryTabsHtml +
-      '<div class="' + styles.faqList + '">' +
-      faqItemsHtml +
-      '</div>' +
-      '</div>';
-
-    // Attach event listeners for accordion functionality
-    this._attachEventListeners();
-    // Attach event listeners for category tabs
-    this._attachTabEventListeners();
   }
 
   /**
@@ -493,13 +512,20 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       this.properties.selectedList,
       this.properties.titleColumn,
       this.properties.descriptionColumn,
-      this.properties.categoryColumn
+      this.properties.categoryColumn || undefined
     )
       .then((items: IFaqItem[]) => {
         this._faqItems = items;
         this._extractCategories();
         // Reset to All if current category no longer exists
-        if (this._selectedCategory !== 'All' && this._categories.indexOf(this._selectedCategory) === -1) {
+        let categoryExists = false;
+        for (let i = 0; i < this._categories.length; i++) {
+          if (this._categories[i] === this._selectedCategory) {
+            categoryExists = true;
+            break;
+          }
+        }
+        if (this._selectedCategory !== 'All' && !categoryExists) {
           this._selectedCategory = 'All';
         }
       })

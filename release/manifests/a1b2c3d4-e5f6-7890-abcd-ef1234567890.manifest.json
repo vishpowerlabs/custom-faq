@@ -26,12 +26,17 @@
       },
       "officeFabricIconFontName": "Help",
       "properties": {
-        "webpartTitle": "Frequently Asked Questions",
-        "webpartDescription": "Find answers to common questions",
+        "webpartTitle": "",
+        "webpartDescription": "",
         "selectedList": "",
         "titleColumn": "",
         "descriptionColumn": "",
-        "allowMultipleExpanded": true
+        "categoryColumn": "",
+        "allowMultipleExpanded": false,
+        "webpartTitleFontSize": "24",
+        "webpartDescriptionFontSize": "14",
+        "faqTitleFontSize": "16",
+        "faqDescriptionFontSize": "14"
       }
     }
   ],
@@ -41,7 +46,7 @@
     "scriptResources": {
       "custom-faq-web-part": {
         "type": "path",
-        "path": "custom-faq-web-part.js"
+        "path": "custom-faq-web-part_bf8f27a6502e80d670b1.js"
       },
       "@microsoft/sp-core-library": {
         "type": "component",

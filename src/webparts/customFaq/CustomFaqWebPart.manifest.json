@@ -31,12 +31,17 @@
       },
       "officeFabricIconFontName": "Help",
       "properties": {
-        "webpartTitle": "Frequently Asked Questions",
-        "webpartDescription": "Find answers to common questions",
+        "webpartTitle": "",
+        "webpartDescription": "",
         "selectedList": "",
         "titleColumn": "",
         "descriptionColumn": "",
-        "allowMultipleExpanded": true
+        "categoryColumn": "",
+        "allowMultipleExpanded": false,
+        "webpartTitleFontSize": "24",
+        "webpartDescriptionFontSize": "14",
+        "faqTitleFontSize": "16",
+        "faqDescriptionFontSize": "14"
       }
     }
   ]
