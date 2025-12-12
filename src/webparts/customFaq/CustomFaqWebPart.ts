@@ -291,32 +291,83 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
   }
 
   /**
-   * Securely strip HTML tags using loop-based sanitization
+   * Securely strip HTML tags using DOM-based parsing
    * Addresses CodeQL js/incomplete-multi-character-sanitization
+   * and js/redos (ReDoS vulnerability)
    */
   private _stripHtmlTags(input: string): string {
     if (!input) {
       return '';
     }
 
-    // Use loop-based approach to handle nested/malformed tags
-    let result = input;
-    let previous: string;
-    const tagPattern = /<[^>]*>/g;
-    
-    do {
-      previous = result;
-      result = result.replace(tagPattern, '');
-    } while (result !== previous);
+    try {
+      // Use DOMParser for safe HTML stripping - no regex vulnerability
+      const parser = new DOMParser();
+      const doc = parser.parseFromString('<div>' + input + '</div>', 'text/html');
+      const container = doc.body.firstChild as HTMLElement;
+      
+      if (!container) {
+        return this._fallbackStripTags(input);
+      }
 
-    // Also decode common HTML entities
-    result = result
-      .replace(/&nbsp;/g, ' ')
-      .replace(/&amp;/g, '&')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&#39;/g, "'");
+      // Get text content only (strips all HTML)
+      let result = container.textContent || '';
+
+      // Decode common HTML entities
+      result = this._decodeHtmlEntities(result);
+
+      return result;
+    } catch (error) {
+      // Fallback if DOMParser fails
+      console.warn('DOMParser failed, using fallback:', error);
+      return this._fallbackStripTags(input);
+    }
+  }
+
+  /**
+   * Fallback tag stripper using character-by-character parsing
+   * Safe from ReDoS as it doesn't use regex with backtracking
+   */
+  private _fallbackStripTags(input: string): string {
+    let result = '';
+    let inTag = false;
+    
+    for (let i = 0; i < input.length; i++) {
+      const char = input[i];
+      if (char === '<') {
+        inTag = true;
+      } else if (char === '>') {
+        inTag = false;
+      } else if (!inTag) {
+        result += char;
+      }
+    }
+
+    return this._decodeHtmlEntities(result);
+  }
+
+  /**
+   * Decode common HTML entities
+   */
+  private _decodeHtmlEntities(text: string): string {
+    const entities: { [key: string]: string } = {
+      '&nbsp;': ' ',
+      '&amp;': '&',
+      '&lt;': '<',
+      '&gt;': '>',
+      '&quot;': '"',
+      '&#39;': "'",
+      '&#x27;': "'",
+      '&apos;': "'"
+    };
+
+    let result = text;
+    const keys = Object.keys(entities);
+    for (let i = 0; i < keys.length; i++) {
+      const entity = keys[i];
+      // Use split/join instead of regex to avoid ReDoS
+      result = result.split(entity).join(entities[entity]);
+    }
 
     return result;
   }
