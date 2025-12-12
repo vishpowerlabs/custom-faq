@@ -552,7 +552,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
    * Escape special regex characters
    */
   private _escapeRegExp(text: string): string {
-    return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return text.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
 
   private _getFontSize(size: string | undefined, defaultSize: string): string {
