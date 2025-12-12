@@ -52,7 +52,7 @@
     "scriptResources": {
       "custom-faq-web-part": {
         "type": "path",
-        "path": "custom-faq-web-part.js"
+        "path": "custom-faq-web-part_749018373aa6c89721a6.js"
       },
       "@microsoft/sp-core-library": {
         "type": "component",
