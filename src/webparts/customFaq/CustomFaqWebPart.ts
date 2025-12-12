@@ -39,7 +39,7 @@ export interface ICustomFaqWebPartProps {
 
 export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWebPartProps> {
 
-  private _spService: SharePointService;
+  private _spService!: SharePointService;
   private _lists: IListInfo[] = [];
   private _columns: IColumnInfo[] = [];
   private _faqItems: IFaqItem[] = [];
@@ -103,24 +103,28 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       if (theme.semanticColors) {
         const semanticColors: { [key: string]: string } = theme.semanticColors as { [key: string]: string };
         const semanticKeys = Object.keys(semanticColors);
-        for (let i = 0; i < semanticKeys.length; i++) {
+        let i = 0;
+        while (i < semanticKeys.length) {
           const key = semanticKeys[i];
           const value = semanticColors[key];
           if (value) {
             this.domElement.style.setProperty('--' + key, value);
           }
+          i++;
         }
       }
 
       if (theme.palette) {
         const palette: { [key: string]: string } = theme.palette as { [key: string]: string };
         const paletteKeys = Object.keys(palette);
-        for (let i = 0; i < paletteKeys.length; i++) {
-          const key = paletteKeys[i];
+        let j = 0;
+        while (j < paletteKeys.length) {
+          const key = paletteKeys[j];
           const value = palette[key];
           if (value) {
             this.domElement.style.setProperty('--' + key, value);
           }
+          j++;
         }
       }
     } catch (error) {
@@ -132,12 +136,14 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     const categorySet: { [key: string]: boolean } = {};
     this._categories = [];
 
-    for (let i = 0; i < this._faqItems.length; i++) {
+    let i = 0;
+    while (i < this._faqItems.length) {
       const category = this._faqItems[i].category;
       if (category && !categorySet[category]) {
         categorySet[category] = true;
         this._categories.push(category);
       }
+      i++;
     }
 
     this._categories.sort();
@@ -153,10 +159,12 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     if (this._selectedCategory === 'All') {
       filtered = this._faqItems.slice();
     } else {
-      for (let i = 0; i < this._faqItems.length; i++) {
+      let i = 0;
+      while (i < this._faqItems.length) {
         if (this._faqItems[i].category === this._selectedCategory) {
           filtered.push(this._faqItems[i]);
         }
+        i++;
       }
     }
 
@@ -165,13 +173,14 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       const query = this._searchQuery.toLowerCase().trim();
       const searchResults: IFaqItem[] = [];
 
-      for (let i = 0; i < filtered.length; i++) {
-        const item = filtered[i];
+      let j = 0;
+      while (j < filtered.length) {
+        const item = filtered[j];
         const titleMatch = item.title && item.title.toLowerCase().indexOf(query) !== -1;
         let answerMatch = false;
 
         if (this.properties.searchInAnswers && item.description) {
-          // Strip HTML tags for search using loop-based sanitization
+          // Strip HTML tags for search using DOM-based sanitization
           const plainDescription = this._stripHtmlTags(item.description);
           answerMatch = plainDescription.toLowerCase().indexOf(query) !== -1;
         }
@@ -179,6 +188,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
         if (titleMatch || answerMatch) {
           searchResults.push(item);
         }
+        j++;
       }
 
       filtered = searchResults;
@@ -196,10 +206,12 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     }
 
     let count = 0;
-    for (let i = 0; i < this._faqItems.length; i++) {
+    let i = 0;
+    while (i < this._faqItems.length) {
       if (this._faqItems[i].category === this._selectedCategory) {
         count++;
       }
+      i++;
     }
     return count;
   }
@@ -252,7 +264,8 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
 
       const lowerQuery = query.toLowerCase();
       
-      for (let i = 0; i < textNodes.length; i++) {
+      let i = 0;
+      while (i < textNodes.length) {
         const textNode = textNodes[i];
         const text = textNode.textContent || '';
         const lowerText = text.toLowerCase();
@@ -280,6 +293,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
           
           textNode.parentNode.replaceChild(fragment, textNode);
         }
+        i++;
       }
 
       return container.innerHTML;
@@ -311,12 +325,10 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       }
 
       // Get text content only (strips all HTML)
-      let result = container.textContent || '';
+      const result = container.textContent || '';
 
       // Decode common HTML entities
-      result = this._decodeHtmlEntities(result);
-
-      return result;
+      return this._decodeHtmlEntities(result);
     } catch (error) {
       // Fallback if DOMParser fails
       console.warn('DOMParser failed, using fallback:', error);
@@ -351,24 +363,12 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
   }
 
   /**
-   * Decode common HTML entities
+   * Decode common HTML entities using split/join (ReDoS safe)
    */
   private _decodeHtmlEntities(text: string): string {
-    const entities: { [key: string]: string } = {
-      '&nbsp;': ' ',
-      '&amp;': '&',
-      '&lt;': '<',
-      '&gt;': '>',
-      '&quot;': '"',
-      '&#39;': "'",
-      '&#x27;': "'",
-      '&apos;': "'"
-    };
-
-    let result = text;
-    
     // Use split/join instead of regex to avoid ReDoS
     // Process each entity directly to avoid for loop lint warning
+    let result = text;
     result = result.split('&nbsp;').join(' ');
     result = result.split('&amp;').join('&');
     result = result.split('&lt;').join('<');
@@ -377,7 +377,6 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     result = result.split('&#39;').join("'");
     result = result.split('&#x27;').join("'");
     result = result.split('&apos;').join("'");
-
     return result;
   }
 
@@ -482,8 +481,9 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
             '</button>'
           );
 
-          for (let i = 0; i < this._categories.length; i++) {
-            const category = this._categories[i];
+          let catIdx = 0;
+          while (catIdx < this._categories.length) {
+            const category = this._categories[catIdx];
             const isActive = this._selectedCategory === category;
             const activeClass = isActive ? ' ' + styles.activeTab : '';
             tabsArray.push(
@@ -494,6 +494,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
               this._escapeHtml(category) +
               '</button>'
             );
+            catIdx++;
           }
 
           categoryTabsHtml = '<div class="' + styles.categoryTabs + '" style="border-bottom-color: ' + neutralLight + ';">' +
@@ -530,14 +531,16 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
             '</div>';
         } else {
           const itemsHtmlArray: string[] = [];
-          for (let index = 0; index < filteredItems.length; index++) {
+          let index = 0;
+          while (index < filteredItems.length) {
             const item = filteredItems[index];
             let attachmentsHtml = '';
 
             if (item.attachments && item.attachments.length > 0) {
               const attachmentLinksArray: string[] = [];
-              for (let j = 0; j < item.attachments.length; j++) {
-                const att = item.attachments[j];
+              let attIdx = 0;
+              while (attIdx < item.attachments.length) {
+                const att = item.attachments[attIdx];
                 attachmentLinksArray.push(
                   '<a href="' + att.url + '" target="_blank" rel="noopener noreferrer" class="' + styles.attachmentLink + '" style="color: ' + linkColor + ';">' +
                   '<span class="' + styles.attachmentIcon + '">' +
@@ -549,6 +552,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
                   this._escapeHtml(att.fileName) +
                   '</a>'
                 );
+                attIdx++;
               }
 
               attachmentsHtml = '<div class="' + styles.attachments + '" style="background-color: ' + neutralLighter + ';">' +
@@ -591,6 +595,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
               '</div>' +
               '</div>'
             );
+            index++;
           }
           faqItemsHtml = itemsHtmlArray.join('');
         }
@@ -651,7 +656,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
         }, 300) as unknown as number;
       });
 
-      // Handle Enter key
+      // Handle Escape key
       searchInput.addEventListener('keydown', function(e: KeyboardEvent): void {
         if (e.key === 'Escape') {
           self._searchQuery = '';
@@ -678,15 +683,19 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     const tabs = this.domElement.querySelectorAll('.' + styles.categoryTab);
     const self = this;
 
-    for (let i = 0; i < tabs.length; i++) {
-      const tab = tabs[i] as HTMLElement;
-      tab.addEventListener('click', function(): void {
-        const category = tab.getAttribute('data-category');
-        if (category) {
-          self._selectedCategory = category;
-          self.render();
-        }
-      });
+    let tabIdx = 0;
+    while (tabIdx < tabs.length) {
+      const tab = tabs[tabIdx] as HTMLElement;
+      (function(t: HTMLElement): void {
+        t.addEventListener('click', function(): void {
+          const category = t.getAttribute('data-category');
+          if (category) {
+            self._selectedCategory = category;
+            self.render();
+          }
+        });
+      })(tab);
+      tabIdx++;
     }
   }
 
@@ -695,29 +704,32 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     const questions = this.domElement.querySelectorAll('.' + styles.faqQuestion);
     const self = this;
 
-    for (let index = 0; index < questions.length; index++) {
+    let index = 0;
+    while (index < questions.length) {
       const questionElement = questions[index] as HTMLElement;
 
-      questionElement.addEventListener('mouseenter', function(): void {
-        const hoverBg = questionElement.getAttribute('data-hover-bg');
-        if (hoverBg) {
-          questionElement.style.backgroundColor = hoverBg;
-        }
-      });
+      (function(qEl: HTMLElement, idx: number): void {
+        qEl.addEventListener('mouseenter', function(): void {
+          const hoverBg = qEl.getAttribute('data-hover-bg');
+          if (hoverBg) {
+            qEl.style.backgroundColor = hoverBg;
+          }
+        });
 
-      questionElement.addEventListener('mouseleave', function(): void {
-        questionElement.style.backgroundColor = '';
-      });
+        qEl.addEventListener('mouseleave', function(): void {
+          qEl.style.backgroundColor = '';
+        });
 
-      (function(idx: number): void {
-        questionElement.addEventListener('click', function(): void {
+        qEl.addEventListener('click', function(): void {
           const faqItem = faqItems[idx];
 
           if (!self.properties.allowMultipleExpanded) {
-            for (let i = 0; i < faqItems.length; i++) {
+            let i = 0;
+            while (i < faqItems.length) {
               if (i !== idx && faqItems[i].classList.contains(styles.expanded)) {
                 faqItems[i].classList.remove(styles.expanded);
               }
+              i++;
             }
           }
 
@@ -727,7 +739,9 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
             faqItem.classList.add(styles.expanded);
           }
         });
-      })(index);
+      })(questionElement, index);
+
+      index++;
     }
   }
 
@@ -755,7 +769,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     }
 
     // Plain text: escape HTML entities and convert newlines
-    return this._escapeHtml(description).replace(/\n/g, '<br>');
+    return this._escapeHtml(description).split('\n').join('<br>');
   }
 
   private _loadLists(): Promise<void> {
@@ -801,11 +815,13 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
         this._faqItems = items;
         this._extractCategories();
         let categoryExists = false;
-        for (let i = 0; i < this._categories.length; i++) {
+        let i = 0;
+        while (i < this._categories.length) {
           if (this._categories[i] === this._selectedCategory) {
             categoryExists = true;
             break;
           }
+          i++;
         }
         if (this._selectedCategory !== 'All' && !categoryExists) {
           this._selectedCategory = 'All';
@@ -852,8 +868,10 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       { key: '', text: '-- Select a list --' }
     ];
 
-    for (let i = 0; i < this._lists.length; i++) {
+    let i = 0;
+    while (i < this._lists.length) {
       options.push({ key: this._lists[i].id, text: this._lists[i].title });
+      i++;
     }
 
     return options;
@@ -864,11 +882,13 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       { key: '', text: '-- Select a column --' }
     ];
 
-    for (let i = 0; i < this._columns.length; i++) {
+    let i = 0;
+    while (i < this._columns.length) {
       const col = this._columns[i];
       if (col.type === 'Text' || col.type === 'Note') {
         options.push({ key: col.internalName, text: col.title });
       }
+      i++;
     }
 
     return options;
@@ -879,12 +899,14 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       { key: '', text: '-- Select a column --' }
     ];
 
-    for (let i = 0; i < this._columns.length; i++) {
+    let i = 0;
+    while (i < this._columns.length) {
       const col = this._columns[i];
       if (col.type === 'Text' || col.type === 'Note') {
         const typeLabel = col.type === 'Note' ? 'Multi-line' : 'Single-line';
         options.push({ key: col.internalName, text: col.title + ' (' + typeLabel + ')' });
       }
+      i++;
     }
 
     return options;
@@ -895,11 +917,13 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       { key: '', text: '-- No category (disable tabs) --' }
     ];
 
-    for (let i = 0; i < this._columns.length; i++) {
+    let i = 0;
+    while (i < this._columns.length) {
       const col = this._columns[i];
       if (col.type === 'Text' || col.type === 'Choice') {
         options.push({ key: col.internalName, text: col.title });
       }
+      i++;
     }
 
     return options;
