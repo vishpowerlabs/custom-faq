@@ -688,7 +688,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       const tab = tabs[tabIdx] as HTMLElement;
       (function(t: HTMLElement): void {
         t.addEventListener('click', function(): void {
-          const category = t.getAttribute('data-category');
+          const category = t.dataset.category;
           if (category) {
             self._selectedCategory = category;
             self.render();
@@ -710,7 +710,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
 
       (function(qEl: HTMLElement, idx: number): void {
         qEl.addEventListener('mouseenter', function(): void {
-          const hoverBg = qEl.getAttribute('data-hover-bg');
+          const hoverBg = qEl.dataset.hoverBg;
           if (hoverBg) {
             qEl.style.backgroundColor = hoverBg;
           }
