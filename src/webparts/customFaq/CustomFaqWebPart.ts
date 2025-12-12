@@ -366,12 +366,17 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
     };
 
     let result = text;
-    const keys = Object.keys(entities);
-    for (let i = 0; i < keys.length; i++) {
-      const entity = keys[i];
-      // Use split/join instead of regex to avoid ReDoS
-      result = result.split(entity).join(entities[entity]);
-    }
+    
+    // Use split/join instead of regex to avoid ReDoS
+    // Process each entity directly to avoid for loop lint warning
+    result = result.split('&nbsp;').join(' ');
+    result = result.split('&amp;').join('&');
+    result = result.split('&lt;').join('<');
+    result = result.split('&gt;').join('>');
+    result = result.split('&quot;').join('"');
+    result = result.split('&#39;').join("'");
+    result = result.split('&#x27;').join("'");
+    result = result.split('&apos;').join("'");
 
     return result;
   }
