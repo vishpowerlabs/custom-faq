@@ -424,7 +424,7 @@ var _themeState = initializeThemeState();
 /**
  * Matches theming tokens. For example, "[theme: themeSlotName, default: #FFF]" (including the quotes).
  */
-var _themeTokenRegex = /[\'\"]\[theme:\s*([A-Za-z0-9_-]+)\s*(?:,\s*default:\s*([^\]\r\n]+?))?\s*\][\'\"]/g;
+var _themeTokenRegex = null; // Replaced with safe parser implementation
 var now = function () {
     return typeof performance !== 'undefined' && !!performance.now ? performance.now() : Date.now();
 };
@@ -638,37 +638,143 @@ function resolveThemableArray(splitStyleArray) {
  * @param {string} styles Tokenized styles to split.
  */
 function splitStyles(styles) {
+    return _safeSplitStyles(styles);
+}
+function _safeSplitStyles(styles) {
     var result = [];
-    if (styles) {
-        var pos = 0; // Current position in styles.
-        var tokenMatch = void 0;
-        while ((tokenMatch = _themeTokenRegex.exec(styles))) {
-            var matchIndex = tokenMatch.index;
-            if (matchIndex > pos) {
+    if (!styles) {
+        return result;
+    }
+    var pos = 0;
+    var len = styles.length;
+    while (pos < len) {
+        var token = _findNextThemeToken(styles, pos);
+        if (!token) {
+            if (pos < len) {
                 result.push({
-                    rawString: styles.substring(pos, matchIndex)
+                    rawString: styles.substring(pos)
                 });
             }
-            result.push({
-                theme: tokenMatch[1],
-                defaultValue: tokenMatch[2] // May be undefined
-            });
-            // index of the first character after the current match
-            pos = _themeTokenRegex.lastIndex;
+            break;
         }
-        // Push the rest of the string after the last match.
+        if (token.index > pos) {
+            result.push({
+                rawString: styles.substring(pos, token.index)
+            });
+        }
         result.push({
-            rawString: styles.substring(pos)
+            theme: token.theme,
+            defaultValue: token.defaultValue
         });
+        pos = token.nextPos;
     }
     return result;
 }
-/**
- * Registers a set of style text. If it is registered too early, we will register it when the
- * window.load event is fired.
- * @param {ThemableArray} styleArray Array of IThemingInstruction objects to register.
- * @param {IStyleRecord} styleRecord May specify a style Element to update.
- */
+function _findNextThemeToken(styles, fromIndex) {
+    var len = styles.length;
+    var searchIndex = fromIndex;
+    while (searchIndex < len) {
+        var singleIdx = styles.indexOf("'[theme:", searchIndex);
+        var doubleIdx = styles.indexOf('"[theme:', searchIndex);
+        var start = -1;
+        var quote = '';
+        if (singleIdx === -1 && doubleIdx === -1) {
+            return null;
+        }
+        if (singleIdx !== -1 && (doubleIdx === -1 || singleIdx <= doubleIdx)) {
+            start = singleIdx;
+            quote = "'";
+        }
+        else {
+            start = doubleIdx;
+            quote = '"';
+        }
+        var openBracketIndex = start + 1;
+        var closeBracketIndex = styles.indexOf(']', openBracketIndex);
+        if (closeBracketIndex === -1) {
+            return null;
+        }
+        var closingQuoteIndex = closeBracketIndex + 1;
+        if (closingQuoteIndex >= len || styles.charAt(closingQuoteIndex) !== quote) {
+            searchIndex = openBracketIndex + 1;
+            continue;
+        }
+        var tokenContent = styles.substring(openBracketIndex + 1, closeBracketIndex);
+        var parsed = _parseThemeToken(tokenContent);
+        if (!parsed) {
+            searchIndex = closingQuoteIndex + 1;
+            continue;
+        }
+        return {
+            index: start,
+            nextPos: closingQuoteIndex + 1,
+            theme: parsed.theme,
+            defaultValue: parsed.defaultValue
+        };
+    }
+    return null;
+}
+function _parseThemeToken(content) {
+    if (!content) {
+        return null;
+    }
+    var themeMarker = 'theme:';
+    var defaultMarker = 'default:';
+    var themeIndex = content.indexOf(themeMarker);
+    if (themeIndex === -1) {
+        return null;
+    }
+    var afterTheme = content.substring(themeIndex + themeMarker.length);
+    var commaIndex = afterTheme.indexOf(',');
+    var themeSegment = commaIndex === -1 ? afterTheme : afterTheme.substring(0, commaIndex);
+    var themeName = themeSegment.trim();
+    if (!_isSafeThemeName(themeName)) {
+        return null;
+    }
+    var defaultValue;
+    var defaultIndex = content.indexOf(defaultMarker);
+    if (defaultIndex !== -1) {
+        defaultValue = _sanitizeDefaultValue(content.substring(defaultIndex + defaultMarker.length));
+    }
+    return {
+        theme: themeName,
+        defaultValue: defaultValue
+    };
+}
+function _isSafeThemeName(name) {
+    if (!name) {
+        return false;
+    }
+    for (var i = 0; i < name.length; i++) {
+        var ch = name.charAt(i);
+        var isLetter = (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+        var isDigit = ch >= '0' && ch <= '9';
+        if (!isLetter && !isDigit && ch !== '_' && ch !== '-') {
+            return false;
+        }
+    }
+    return true;
+}
+function _sanitizeDefaultValue(value) {
+    if (!value) {
+        return undefined;
+    }
+    var trimmed = value.trim();
+    if (!trimmed) {
+        return undefined;
+    }
+    var firstChar = trimmed.charAt(0);
+    var lastChar = trimmed.charAt(trimmed.length - 1);
+    if ((firstChar === '"' && lastChar === '"') || (firstChar === "'" && lastChar === "'")) {
+        trimmed = trimmed.substring(1, trimmed.length - 1);
+    }
+    if (trimmed.length > 512) {
+        trimmed = trimmed.substring(0, 512);
+    }
+    return trimmed;
+}
+
+
 function registerStyles(styleArray) {
     if (typeof document === 'undefined') {
         return;
