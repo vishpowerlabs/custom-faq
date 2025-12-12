@@ -331,9 +331,12 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
   private _fallbackStripTags(input: string): string {
     let result = '';
     let inTag = false;
-    
-    for (let i = 0; i < input.length; i++) {
-      const char = input[i];
+    const chars = input.split('');
+    let idx = 0;
+    const len = chars.length;
+
+    while (idx < len) {
+      const char = chars[idx];
       if (char === '<') {
         inTag = true;
       } else if (char === '>') {
@@ -341,6 +344,7 @@ export default class CustomFaqWebPart extends BaseClientSideWebPart<ICustomFaqWe
       } else if (!inTag) {
         result += char;
       }
+      idx++;
     }
 
     return this._decodeHtmlEntities(result);
